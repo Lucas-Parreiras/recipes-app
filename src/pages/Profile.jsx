@@ -1,7 +1,8 @@
-function Profile() {
+import React from 'react';
+import Header from '../components/Header';
+
+export default function Profile() {
   return (
-    <p>Profile</p>
+    <Header title="Profile" />
   );
 }
-
-export default Profile;

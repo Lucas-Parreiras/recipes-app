@@ -1,7 +1,8 @@
-function Meals() {
+import React from 'react';
+import Header from '../components/Header';
+
+export default function Meals() {
   return (
-    <p>Meals</p>
+    <Header title="Meals" />
   );
 }
-
-export default Meals;

@@ -50,6 +50,7 @@ export default function Header({ title }) {
               placeholder="Pesquisar..."
             />
             <SearchBar />
+            { /* incluída chamada ao componente SearchBar */}
           </form>
         )}
       </div>

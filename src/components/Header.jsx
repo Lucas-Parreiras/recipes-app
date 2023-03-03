@@ -3,6 +3,7 @@ import React, { useState } from 'react';
 import { useHistory, useLocation } from 'react-router-dom';
 import profileIcon from '../images/profileIcon.svg';
 import searchIcon from '../images/searchIcon.svg';
+import SearchBar from './SearchBar';
 
 export default function Header({ title }) {
   const history = useHistory();
@@ -48,6 +49,8 @@ export default function Header({ title }) {
               type="text"
               placeholder="Pesquisar..."
             />
+            <SearchBar />
+            { /* incluída chamada ao componente SearchBar */}
           </form>
         )}
       </div>

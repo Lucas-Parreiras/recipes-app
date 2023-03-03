@@ -1,7 +1,8 @@
-function FavoriteRecipes() {
+import React from 'react';
+import Header from '../components/Header';
+
+export default function FavoriteRecipes() {
   return (
-    <p>FavoriteRecipes</p>
+    <Header title="Favorite Recipes" />
   );
 }
-
-export default FavoriteRecipes;

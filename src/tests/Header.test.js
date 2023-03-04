@@ -3,8 +3,11 @@ import { render, screen, fireEvent } from '@testing-library/react';
 import { MemoryRouter, Route } from 'react-router-dom';
 import userEvent from '@testing-library/user-event';
 import Header from '../components/Header';
-import Meals from '../pages/Meals';
+// import Meals from '../pages/Meals';
 import renderWithRouter from './renderWithRouter.js/renderWithRouter';
+import App from '../App';
+import mealRecipesApiMock from './mocks/mealRecipesApiMock';
+// import { act } from 'react-dom/test-utils';
 
 describe('Header', () => {
   it('Testando se renderiza as telas drinks e meals', () => {
@@ -36,9 +39,16 @@ describe('Header', () => {
     expect(searchButton).toBeInTheDocument();
   });
 
-  it('Testa redirecionamento da rota /Meals', () => {
-    const { history } = renderWithRouter(<Meals />);
-    const btn = screen.getByRole('img', { name: /profile/i });
+  it('Testa redirecionamento da rota /Meals', async () => {
+    jest.spyOn(global, 'fetch');
+    global.fetch.mockResolvedValue({
+      json: jest.fn().mockResolvedValue(mealRecipesApiMock),
+    });
+
+    const { history } = renderWithRouter(<App />);
+    history.push('/meals');
+
+    const btn = await screen.findByRole('img', { name: /profile/i });
     expect(btn).toBeInTheDocument();
     userEvent.click(btn);
     expect(history.location.pathname).toBe('/profile');

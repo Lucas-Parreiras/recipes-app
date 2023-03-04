@@ -1,12 +1,12 @@
 .categories-container {
   display: flex;
-
-  /* justify-content: center; */
-  margin-bottom: 30px;
+  justify-content: center;
+  margin-bottom: 10px;
 }
 
 .categories-container button {
-  font-size: 10px;
+  font-size: 12px;
+  margin-left: 10px;
 }
 
 .recipes-container {

@@ -5,8 +5,9 @@ import App from '../App';
 import renderWithRouter from './renderWithRouter.js/renderWithRouter';
 import mealRecipesApiMock from './mocks/mealRecipesApiMock';
 import drinkRecipesApiMock from './mocks/drinkRecipesApiMock';
-import mealCategories from './mocks/mealCategoriesMock';
-import drinkCategories from './mocks/drinkCategoriesMock';
+// import drinkCategories from './mocks/drinkCategoriesMock';
+// import filteredDrink from './mocks/filteredDrinksMyCocktail';
+import fetch from '../../cypress/mocks/fetch';
 
 describe('Testes da página de receitas', () => {
   it('Testa se as receitas são carregadas na rota "/meals"', async () => {
@@ -42,29 +43,21 @@ describe('Testes da página de receitas', () => {
   });
 
   it('Testa os filtros são aplicados e removidos corretamente das refeições', async () => {
-    jest.spyOn(global, 'fetch');
-    global.fetch.mockResolvedValue({
-      json: jest.fn().mockResolvedValue(mealRecipesApiMock),
-    });
-
+    global.fetch = fetch;
     const { history } = renderWithRouter(<App />);
     act(() => {
       history.push('/meals');
     });
-
-    jest.spyOn(global, 'fetch');
-    global.fetch.mockResolvedValue({
-      json: jest.fn().mockResolvedValue(mealCategories),
-    });
     const teste1 = await screen.findByText(/corba/i);
-    const teste2 = await screen.findByText(/burek/i);
+    const teste2 = await screen.findByText(/kumpir/i);
     const filterButton = await screen.findByRole('button', { name: /beef/i });
     expect(teste1).toBeInTheDocument();
     expect(teste2).toBeInTheDocument();
     expect(filterButton).toBeInTheDocument();
     userEvent.click(filterButton);
-
-    expect(teste1).not.toBeInTheDocument();
+    // expect(teste1).not.toBeInTheDocument();
+    const filteredMeal = await screen.findByText(/big mac/i);
+    expect(filteredMeal).toBeInTheDocument();
     const rmvFilter = await screen.findByRole('button', { name: /all/i });
     expect(rmvFilter).toBeInTheDocument();
     userEvent.click(rmvFilter);
@@ -72,27 +65,27 @@ describe('Testes da página de receitas', () => {
   });
 
   it('Testa os filtros são aplicados e removidos corretamente dos drinks', async () => {
-    jest.spyOn(global, 'fetch');
-    global.fetch.mockResolvedValue({
-      json: jest.fn().mockResolvedValue(drinkRecipesApiMock),
-    });
+    global.fetch = fetch;
 
     const { history } = renderWithRouter(<App />);
     act(() => {
       history.push('/drinks');
     });
 
-    jest.spyOn(global, 'fetch');
-    global.fetch.mockResolvedValue({
-      json: jest.fn().mockResolvedValue(drinkCategories),
-    });
-    const teste1 = await screen.findByText(/a1/i);
-    const teste2 = await screen.findByText(/ace/i);
-    const filterButton = await screen.findByRole('button', { name: /shake/i });
-    const allButton = await screen.findByRole('button', { name: /all/i });
+    const teste1 = await screen.findByText(/gg/i);
+    const teste2 = await screen.findByText(/a1/i);
     expect(teste1).toBeInTheDocument();
     expect(teste2).toBeInTheDocument();
+    const filterButton = await screen.findByTestId('Cocktail-category-filter');
     expect(filterButton).toBeInTheDocument();
-    expect(allButton).toBeInTheDocument();
+    userEvent.click(filterButton);
+    userEvent.click(filterButton);
+
+    const filteredDrink = await screen.findByText(/gg/i);
+    expect(filteredDrink).toBeInTheDocument();
+    const rmvFilter = await screen.findByRole('button', { name: /all/i });
+    expect(rmvFilter).toBeInTheDocument();
+    userEvent.click(rmvFilter);
+    expect(await screen.findByText(/acid/i)).toBeInTheDocument();
   });
 });

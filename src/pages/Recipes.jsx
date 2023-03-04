@@ -15,8 +15,6 @@ function Recipes() {
   const [originalRecipes, setOriginalRecipes] = useState([]);
   // criação de estado local para armazenamento do filtro selecionado
   const [selectedFilter, setSelectedFilter] = useState('');
-  // criação de estado de loading para o componente
-  const [isLoading, setIsLoading] = useState(false);
   // usado para obtenção de dados do navegador a respeito da rota em uso no momento
   const location = useLocation();
   // destruturando apenas o nome da rota em uso
@@ -55,7 +53,6 @@ function Recipes() {
     // função assíncrona para obtenção das receitas
     const getRecipes = async () => {
       // muda o estado de loading para true, para exibir mensagem de 'carregando...'
-      setIsLoading(true);
       let recipesList = [];
       let categoriesList = [];
       // verificação para ver o pathname
@@ -70,7 +67,6 @@ function Recipes() {
         getTwelveRecipes(recipesList, 'drinks');
         getFiveCategories(categoriesList, 'drinks');
       }
-      setIsLoading(false);
     };
     getRecipes();
   }, [location, pathname, getTwelveRecipes]);
@@ -81,7 +77,7 @@ function Recipes() {
   };
 
   const applyFilterByCategory = async ({ target: { name } }) => {
-    setIsLoading(true);
+    // setIsLoading(true);
     setSelectedFilter(name);
     let recipesList = [];
     if (selectedFilter !== name) {
@@ -99,11 +95,7 @@ function Recipes() {
     } else {
       removeAppliedFilters();
     }
-
-    setIsLoading(false);
   };
-
-  if (isLoading) return <p>Carregando...</p>;
 
   return (
     <div className="main-container">

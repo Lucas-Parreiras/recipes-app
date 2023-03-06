@@ -2,13 +2,12 @@ import PropTypes from 'prop-types';
 import React, { useState, useMemo } from 'react';
 import RecipeContext from './RecipeContext';
 
-const INITIAL_STATE = { inicial: 'incial' };
-
 function RecipeProvider({ children }) {
-  const [state] = useState(INITIAL_STATE);
+  const [recipes, setRecipes] = useState([]);
   const memo = useMemo(() => ({
-    state,
-  }), [state]);
+    recipes,
+    setRecipes,
+  }), [recipes, setRecipes]);
 
   return (
     <RecipeContext.Provider value={ memo }>

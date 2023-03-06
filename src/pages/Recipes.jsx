@@ -1,5 +1,6 @@
 import React, { useEffect, useState, useCallback, useContext } from 'react';
 import { useLocation } from 'react-router-dom';
+import Footer from '../components/Footer';
 import Header from '../components/Header';
 import RecipeContext from '../context/RecipeContext';
 import { cockTailAPI, mealAPI } from '../helpers/APIsHandle';
@@ -147,7 +148,7 @@ function Recipes() {
               )) }
           </div>)}
       </div>
-
+      <Footer />
     </div>
 
   );

@@ -1,6 +1,7 @@
-import React, { useEffect, useState, useCallback } from 'react';
+import React, { useEffect, useState, useCallback, useContext } from 'react';
 import { useLocation } from 'react-router-dom';
 import Header from '../components/Header';
+import RecipeContext from '../context/RecipeContext';
 import { cockTailAPI, mealAPI } from '../helpers/APIsHandle';
 import Drinks from './Drinks';
 import Meals from './Meals';
@@ -8,7 +9,7 @@ import Meals from './Meals';
 function Recipes() {
   const [firstRender, setFirstRender] = useState(true);
   // criação de estado local para armazenamento das receitas obtidas
-  const [recipes, setRecipes] = useState([]);
+  const { recipes, setRecipes } = useContext(RecipeContext);
   // criação de estado local para armazenamento das categorias obtidas
   const [categories, setCatgories] = useState([]);
   // criação de estado local para armazenamento da lista de receitas sem filtros aplicados
@@ -99,7 +100,10 @@ function Recipes() {
 
   return (
     <div className="main-container">
-      <Header title={ pathname === '/meals' ? 'Meals' : 'Drinks' } />
+      <Header />
+      <header>
+        <h1 data-testid="page-title">{ pathname === '/meals' ? 'Meals' : 'Drinks'}</h1>
+      </header>
       <div className="categories-container">
         <button
           data-testid="All-category-filter"
@@ -120,25 +124,28 @@ function Recipes() {
       </div>
 
       <div className="recipes-container">
-        {pathname === '/meals'
-          ? recipes.map(({ idMeal, strMeal, strMealThumb }, index) => (
-            <Meals
-              key={ idMeal }
-              strMeal={ strMeal }
-              strMealThumb={ strMealThumb }
-              idMeal={ idMeal }
-              index={ index }
-            />
-          ))
-          : recipes.map(({ idDrink, strDrink, strDrinkThumb }, index) => (
-            <Drinks
-              key={ idDrink }
-              strDrink={ strDrink }
-              strDrinkThumb={ strDrinkThumb }
-              idDrink={ idDrink }
-              index={ index }
-            />
-          )) }
+        { recipes !== null && (
+          <div>
+            {(pathname === '/meals')
+              ? recipes.map(({ idMeal, strMeal, strMealThumb }, index) => (
+                <Meals
+                  key={ idMeal }
+                  strMeal={ strMeal }
+                  strMealThumb={ strMealThumb }
+                  idMeal={ idMeal }
+                  index={ index }
+                />
+              ))
+              : recipes.map(({ idDrink, strDrink, strDrinkThumb }, index) => (
+                <Drinks
+                  key={ idDrink }
+                  strDrink={ strDrink }
+                  strDrinkThumb={ strDrinkThumb }
+                  idDrink={ idDrink }
+                  index={ index }
+                />
+              )) }
+          </div>)}
       </div>
 
     </div>

@@ -3,6 +3,9 @@ import Header from '../components/Header';
 
 export default function FavoriteRecipes() {
   return (
-    <Header title="Favorite Recipes" />
+    <div>
+      <Header />
+      <h1 data-testid="page-title">Favorite Recipes</h1>
+    </div>
   );
 }

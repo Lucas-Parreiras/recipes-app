@@ -39,7 +39,7 @@ function Recipes() {
       setOriginalRecipes([...newRecipesList]);
       setFirstRender(false);
     }
-  }, [firstRender]);
+  }, [firstRender, setRecipes]); // precisava chamar o setRecipes nessa linha
 
   const getFiveCategories = (categoriesList, categoryType) => {
     const LIMIT = 5;

@@ -1,4 +1,4 @@
-import { screen } from '@testing-library/react';
+import { screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import React from 'react';
 import { act } from 'react-dom/test-utils';
@@ -18,6 +18,30 @@ describe('Testes do Componente SearchBar, rota Meals', () => {
   const FIRST_LETTER_SEARCH_RADIO = 'first-letter-search-radio';
   const EXEC_SEARCH_BTN = 'exec-search-btn';
   const SEARCH_TOP_BTN = 'search-top-btn';
+
+  it('Redireciona o campo com nome selecionado', async () => {
+    const { history } = renderWithRouter(<RecipeProvider><App /></RecipeProvider>);
+    // Navega para a página de drinks
+    act(() => {
+      history.push('/drinks');
+    });
+
+    // Obtém os elementos da tela e executa a pesquisa
+    const topSearchBtn = screen.getByTestId(SEARCH_TOP_BTN);
+    userEvent.click(topSearchBtn);
+    const nameSearchRadio = screen.getByTestId(NAME_SEARCH_RADIO);
+    userEvent.click(nameSearchRadio);
+    const searchInput = screen.getByTestId(SEARCH_INPUT);
+    userEvent.type(searchInput, 'xablau');
+    const execSearchBtn = screen.getByTestId(EXEC_SEARCH_BTN);
+    userEvent.click(execSearchBtn);
+
+    // Aguarda o redirecionamento para a tela de detalhes
+    await waitFor(async () => {
+      const { pathname } = history.location;
+      expect(pathname).toBe('/drinks/178319');
+    }, { timeout: 4000 });
+  });
 
   it('Verifica renderização de todos os elementos', () => {
     const { history } = renderWithRouter(<RecipeProvider><App /></RecipeProvider>);

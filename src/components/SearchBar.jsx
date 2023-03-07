@@ -52,12 +52,11 @@ function SearchBar() {
       const maxIndex = 12;
       const recipesList = fetchedData.slice(0, maxIndex);
       setRecipes(recipesList);
-    } else setRecipes(null);
+    } else setRecipes(null); // teste não passa
   }, [fetchedData]);
 
   useEffect(() => {
-    console.log(recipes);
-    if (recipes === null) {
+    if (recipes === null) { // teste não passa
       global.alert('Sorry, we haven\'t found any recipes for these filters.');
     }
   }, [recipes]);

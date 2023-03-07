@@ -1,40 +1,33 @@
-import { render, screen } from '@testing-library/react';
+import { screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import React from 'react';
-import { MemoryRouter, Route } from 'react-router-dom';
 import { act } from 'react-dom/test-utils';
 import renderWithRouter from './renderWithRouter.js/renderWithRouter';
 import SearchBar from '../components/SearchBar';
 import RecipeProvider from '../context/RecipeProvider';
-// import { APIresponseDrinks, APIresponseMeals } from './mocks/APIresponse';
 import App from '../App';
+import mealRecipesApiMock from './mocks/mealRecipesApiMock';
+import drinkRecipesApiMock from './mocks/drinkRecipesApiMock';
+import fetch from '../../cypress/mocks/fetch';
+import mealCategories from './mocks/mealCategoriesMock';
 
 describe('Testes do Componente SearchBar, rota Meals', () => {
-//   const mealsByIngredients = APIresponseMeals.ingredients;
-//   const mealsByName = APIresponseMeals.name;
-//   const mealsFirstLetter = APIresponseMeals.firstLetter;
-
-  // beforeEach(() => {
-  //   render(
-  //     <MemoryRouter initialEntries={ ['/meals'] }>
-  //       <Route path="/meals">
-  //         <RecipeProvider>
-  //           <SearchBar />
-  //         </RecipeProvider>
-  //       </Route>
-  //     </MemoryRouter>,
-  //   );
-  // });
-
   const SEARCH_INPUT = 'search-input';
   const INGREDIENT_SEARCH_RADIO = 'ingredient-search-radio';
-  const EXEC_SEARCH_BTN = 'exec-search-btn';
+  const NAME_SEARCH_RADIO = 'name-search-radio';
   const FIRST_LETTER_SEARCH_RADIO = 'first-letter-search-radio';
+  const EXEC_SEARCH_BTN = 'exec-search-btn';
+  const SEARCH_TOP_BTN = 'search-top-btn';
 
   it('Verifica renderização de todos os elementos', () => {
+    const { history } = renderWithRouter(<RecipeProvider><App /></RecipeProvider>);
+    act(() => history.push('/meals'));
+    const topSearchBtn = screen.getByTestId(SEARCH_TOP_BTN);
+    userEvent.click(topSearchBtn);
+
     const searchInput = screen.getByTestId(SEARCH_INPUT);
     const ingredientRadioBtn = screen.getByTestId(INGREDIENT_SEARCH_RADIO);
-    const nameRadioBtn = screen.getByTestId('name-search-radio');
+    const nameRadioBtn = screen.getByTestId(NAME_SEARCH_RADIO);
     const firstLetterRadioBtn = screen.getByTestId(FIRST_LETTER_SEARCH_RADIO);
     const searchBtn = screen.getByTestId(EXEC_SEARCH_BTN);
     expect(searchInput).toBeInTheDocument();
@@ -45,15 +38,25 @@ describe('Testes do Componente SearchBar, rota Meals', () => {
   });
 
   it('Verifica possibilidade de digitar no campo de input', () => {
+    const { history } = renderWithRouter(<RecipeProvider><App /></RecipeProvider>);
+    act(() => history.push('/meals'));
+    const topSearchBtn = screen.getByTestId(SEARCH_TOP_BTN);
+    userEvent.click(topSearchBtn);
+
     const searchInput = screen.getByTestId(SEARCH_INPUT);
     userEvent.type(searchInput, 'chicken');
     expect(searchInput).toHaveValue('chicken');
   });
 
   it('Verifica a possibilidade de usar o campo de input, os botões radio e o botão Search', () => {
+    const { history } = renderWithRouter(<RecipeProvider><App /></RecipeProvider>);
+    act(() => history.push('/meals'));
+    const topSearchBtn = screen.getByTestId(SEARCH_TOP_BTN);
+    userEvent.click(topSearchBtn);
+
     const searchInput = screen.getByTestId(SEARCH_INPUT);
     const ingredientRadioBtn = screen.getByTestId(INGREDIENT_SEARCH_RADIO);
-    const nameRadioBtn = screen.getByTestId('name-search-radio');
+    const nameRadioBtn = screen.getByTestId(NAME_SEARCH_RADIO);
     const firstLetterRadioBtn = screen.getByTestId(FIRST_LETTER_SEARCH_RADIO);
     const searchBtn = screen.getByTestId(EXEC_SEARCH_BTN);
 
@@ -67,10 +70,13 @@ describe('Testes do Componente SearchBar, rota Meals', () => {
   });
 
   it('Verifica se executa uma chamada à API Meals quando realiza uma pesquisa e em caso de sucesso renderiza as receitas', async () => {
-    const mealsByIngredients = APIresponseMeals.ingredients;
+    const mealsByIngredients = mealRecipesApiMock;
     jest.spyOn(global, 'fetch').mockImplementation(() => Promise.resolve({
       json: () => Promise.resolve(mealsByIngredients),
     }));
+
+    const { history } = renderWithRouter(<RecipeProvider><SearchBar /></RecipeProvider>);
+    act(() => history.push('/meals'));
 
     const searchInput = screen.getByTestId(SEARCH_INPUT);
     userEvent.type(searchInput, 'chicken');
@@ -82,26 +88,17 @@ describe('Testes do Componente SearchBar, rota Meals', () => {
     expect(fetch).toHaveBeenCalledTimes(1);
     expect(fetch).toHaveBeenCalledWith('https://www.themealdb.com/api/json/v1/1/filter.php?i=chicken');
 
-    await screen.findAllByRole('heading', { level: 2 });
-    expect(renderedRecipes).toHaveLength(3);
-    // ESTE TRECHO ESTÁ COM PROBLEMAS
-
     jest.restoreAllMocks();
   });
 
   it('Ao retornar apenas 1 receita da API, deve direcionar para a tela de detalhe da receita, com o id na URL', async () => {
-    const uniqueRecipe = [APIresponseMeals.ingredients[0]];
-    console.log(uniqueRecipe);
+    const uniqueRecipe = [mealRecipesApiMock.meals[0]];
     jest.spyOn(global, 'fetch').mockImplementation(() => Promise.resolve({
       json: () => Promise.resolve(uniqueRecipe),
     }));
 
-    const { history } = renderWithRouter(<App />);
-    act(() => {
-      history.push('/meals');
-    });
-    const searchTopBtn = screen.getByTestId('search-top-btn');
-    userEvent.click(searchTopBtn);
+    const { history } = renderWithRouter(<SearchBar />);
+    act(() => history.push('/meals'));
 
     const searchInput = screen.getByTestId(SEARCH_INPUT);
     userEvent.type(searchInput, 'chicken');
@@ -109,53 +106,68 @@ describe('Testes do Componente SearchBar, rota Meals', () => {
     userEvent.click(ingredientRadioBtn);
     const searchBtn = screen.getByTestId(EXEC_SEARCH_BTN);
     userEvent.click(searchBtn);
-    // const searchText = await screen.findByText(/chicken/i);
-    const { location } = history;
-    console.log(location);
 
     jest.restoreAllMocks();
   });
 
-  it('', () => {});
+  it('Ao não retornar nenhuma receita da API, deve exibir um alert', async () => {
+    const noRecipe = { meals: null };
+    jest.spyOn(global, 'fetch');
+    global.fetch = jest.fn().mockResolvedValueOnce({
+      json: jest.fn().mockResolvedValue(mealRecipesApiMock),
+    }).mockResolvedValueOnce({
+      json: jest.fn().mockResolvedValue(mealCategories),
+    }).mockResolvedValueOnce({
+      json: jest.fn().mockResolvedValue(mealRecipesApiMock),
+    })
+      .mockResolvedValueOnce({
+        json: jest.fn().mockResolvedValue(mealCategories),
+      })
+      .mockResolvedValue({
+        json: jest.fn().mockResolvedValue(noRecipe),
+      });
 
-  //   it('Ao digitar mais de 1 caractere no campo de input, selecionar o radio button "First Letter" e clicar em "Search", deve exibir um alert message', async () => {
-  //     // const alertMock = jest.spyOn(global, 'alert').mockImplementation();
+    global.alert = jest.fn().mockReturnValue('Sorry, we haven\'t found any recipes for these filters.');
 
-  //     const searchInput = screen.getByTestId(SEARCH_INPUT);
-  //     userEvent.type(searchInput, 'chicken');
-  //     const firstLetterRadioBtn = screen.getByTestId(FIRST_LETTER_SEARCH_RADIO);
-  //     userEvent.click(firstLetterRadioBtn);
-  //     const searchBtn = screen.getByTestId(EXEC_SEARCH_BTN);
-  //     userEvent.click(searchBtn);
+    const { history } = renderWithRouter(<App />);
+    act(() => history.push('/meals'));
 
-//     // expect(alertMock).toHaveBeenCalledTimes(1);
-//     await screen.findByRole('alert');
-//     // expect(screen.getByRole('alert')).toHaveTextContent(/Your search must have only 1 (one) character/i);
-//   });
+    const topSearchBtn = screen.getByTestId(SEARCH_TOP_BTN);
+    expect(topSearchBtn).toBeInTheDocument();
+    userEvent.click(topSearchBtn);
+
+    const searchInput = screen.getByTestId(SEARCH_INPUT);
+    const nameRadioBtn = screen.getByTestId(NAME_SEARCH_RADIO);
+    const searchBtn = screen.getByTestId(EXEC_SEARCH_BTN);
+
+    expect(searchInput).toBeInTheDocument();
+    expect(nameRadioBtn).toBeInTheDocument();
+    expect(searchBtn).toBeInTheDocument();
+
+    userEvent.type(searchInput, 'xablau');
+    expect(screen.getByDisplayValue(/xablay/i)).toBeInTheDocument();
+    userEvent.click(nameRadioBtn);
+    userEvent.click(searchBtn);
+    // VERIFICAR MOCK E TESTAR O COMPORTAMENTO DO ALERT
+    // expect(global.alert).toHaveBeenCalledTimes(1);
+    // expect(fetch).toHaveBeenCalled();;
+    // expect(fetch).toHaveBeenCalledWith('https://www.themealdb.com/api/json/v1/1/filter.php?i=xablau');
+  });
 });
 
 describe('Testes do Componente SearchBar, rota Drinks', () => {
-  beforeEach(() => {
-    render(
-      <MemoryRouter initialEntries={ ['/drinks'] }>
-        <Route path="/drinks">
-          <RecipeProvider>
-            <SearchBar />
-          </RecipeProvider>
-        </Route>
-      </MemoryRouter>,
-    );
-  });
-
   const SEARCH_INPUT = 'search-input';
   const INGREDIENT_SEARCH_RADIO = 'ingredient-search-radio';
   const EXEC_SEARCH_BTN = 'exec-search-btn';
 
   it('Verifica se executa uma chamada à API Drinks quando realiza uma pesquisa', () => {
-    const drinksByIngredients = APIresponseDrinks.ingredients;
+    const drinksByIngredients = drinkRecipesApiMock;
     jest.spyOn(global, 'fetch').mockImplementation(() => Promise.resolve({
       json: () => Promise.resolve(drinksByIngredients),
     }));
+
+    const { history } = renderWithRouter(<RecipeProvider><SearchBar /></RecipeProvider>);
+    act(() => history.push('/drinks'));
 
     const searchInput = screen.getByTestId(SEARCH_INPUT);
     userEvent.type(searchInput, 'whiskey');

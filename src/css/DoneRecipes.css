@@ -1,0 +1,154 @@
+.filters-container {
+  display: flex;
+  justify-content: center;
+  padding: 30px 2%;
+}
+
+.filters-container input {
+  background-color: transparent;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: contain;
+  border: none;
+  border-radius: 10px;
+  height: 86.43px;
+  margin-left: 35px;
+  outline: none;
+  width: 66.72px;
+}
+
+.filters-container input:first-of-type {
+  margin-left: 0;
+}
+
+.filters-container input:nth-child( 1 ) {
+  background-image: url('../images/All.svg');
+}
+
+.filters-container input:nth-child( 2 ) {
+  background-image: url('../images/foods.svg');
+}
+
+.filters-container input:nth-child( 3 ) {
+  background-image: url('../images/drinks.svg');
+}
+
+.cards-container-recipes {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-around;
+  padding: 0 2%;
+}
+
+.card-recipe {
+  border: 1px solid #ccc;
+  border-radius: 10px;
+  display: flex;
+  flex-direction: row;
+  margin-bottom: 20px;
+  width: 45%;
+
+  /* background-color: red; */
+}
+
+.card-recipe img {
+  border-bottom-left-radius: 10px;
+  border-top-left-radius: 10px;
+  width: 100%;
+}
+
+.card-content, .card-recipe a {
+  width: 50%;
+}
+
+.card-recipe a {
+  color: #fcc436;
+  cursor: pointer;
+  font-size: 16px;
+  text-decoration: none;
+}
+
+.card-recipe a:hover {
+  color: #dba41a;
+}
+
+.image-link {
+  display: flex;
+
+  /* white-space: nowrap; */
+}
+
+.share-recipe-btn {
+  background-color: transparent;
+  border: none;
+  color: black;
+  font-size: 10px;
+  height: 32px;
+  margin-left: 10px;
+  outline: none;
+  transition: 0.3s;
+  vertical-align: middle;
+  width: 32px;
+
+}
+
+.share-button-container {
+  display: flex;
+  flex-direction: column;
+}
+
+.share-recipe-btn img {
+  width: 100%;
+}
+
+.share-recipe-btn:hover {
+  transform: scale(1.5);
+}
+
+.share-recipe-btn:disabled {
+  cursor: not-allowed;
+}
+
+.card-content {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 20px;
+}
+
+.title-and-button {
+  display: flex;
+  justify-content: space-between;
+}
+
+.card-content span {
+  color: #797d86;
+  font-size: 13px;
+}
+
+.card-tags {
+  background-color: #d9d9d9;
+  border-radius: 20px;
+  margin-left: 10px;
+  padding: 7px;
+  user-select: none;
+}
+
+.card-tags:nth-child( 1 ) {
+  margin-left: 0;
+}
+
+
+@media screen and ( max-width : 860px ) {
+
+  .card-recipe {
+    width: 75%;
+  }
+}
+
+@media screen and ( max-width : 670px ) {
+
+  .card-recipe {
+    width: 100%;
+  }
+}

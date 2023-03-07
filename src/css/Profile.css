@@ -1,13 +1,36 @@
 p {
   display: none;
+  width: 100vw;
 }
 
 .links {
   display: flex;
   flex-direction: column;
+  width: 100vw;
+}
+
+.links > a {
+  display: flex;
+  justify-content: center;
+  width: 100vw;
 }
 
 .links > a > img {
   margin: 10px;
   width: 300px;
+}
+
+.userInfo {
+  align-items: center;
+  display: flex;
+  flex-direction: column;
+  margin: 20px;
+}
+
+.userInfo > h5 {
+  margin: 20px;
+  font-weight: 700;
+}
+.userInfo > img {
+  width: 70px;
 }

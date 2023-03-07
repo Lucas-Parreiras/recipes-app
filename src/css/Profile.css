@@ -1,0 +1,13 @@
+p {
+  display: none;
+}
+
+.links {
+  display: flex;
+  flex-direction: column;
+}
+
+.links > a > img {
+  margin: 10px;
+  width: 300px;
+}

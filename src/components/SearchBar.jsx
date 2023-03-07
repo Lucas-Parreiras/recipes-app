@@ -53,7 +53,7 @@ function SearchBar() {
       const recipesList = fetchedData.slice(0, maxIndex);
       setRecipes(recipesList);
     } else setRecipes(null); // teste não passa
-  }, [fetchedData]);
+  }, [fetchedData, history, location.pathname, setRecipes]); // precisava chamar esses valores
 
   useEffect(() => {
     if (recipes === null) { // teste não passa

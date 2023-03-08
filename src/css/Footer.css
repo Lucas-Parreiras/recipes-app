@@ -1,24 +1,10 @@
-/* .main-container {
-    height: 100vh;
-    min-height: 70vh;
-    position: relative;
-} */
-
 .footer {
   background-color: #41197f;
   bottom: 0;
   display: flex;
   justify-content: space-between;
   left: 0;
-  padding: 20px 2%;
+  padding: 15px 3%;
   position: fixed;
   width: 100%;
-
-  /* background-color: red; */
 }
-
-/*
-.footer img {
-    border: none;
-    outline: none;
-} */

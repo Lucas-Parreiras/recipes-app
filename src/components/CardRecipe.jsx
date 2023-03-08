@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom';
 
 export default function CardRecipe({ recipeType, recipeName, recipeThumb, index, id }) {
   return (
-    <Link to={ `/${recipeType}/${id}` }>
+    <Link to={ `/${recipeType}/${id}` } className="recipe-card-link">
       <div
         className="recipe-card"
         data-testid={ `${index}-recipe-card` }

@@ -1,0 +1,48 @@
+.all-meals-filter-button {
+  background-image: url('../images/All.svg');
+}
+
+.all-drinks-filter-button {
+  background-image: url('../images/AllDrinks.svg');
+}
+
+
+.Beef-filter-button {
+  background-image: url('../images/Beef.svg');
+}
+
+.Breakfast-filter-button {
+  background-image: url('../images/Breakfast.svg');
+}
+
+.Chicken-filter-button {
+  background-image: url('../images/Chicken.svg');
+}
+
+.Dessert-filter-button {
+  background-image: url('../images/Dessert.svg');
+}
+
+.Goat-filter-button {
+  background-image: url('../images/Goat.svg');
+}
+
+.Ordinary-Drink-filter-button {
+  background-image: url('../images/ordinary.svg');
+}
+
+.Cocktail-filter-button {
+  background-image: url('../images/cocktail.svg');
+}
+
+.Shake-filter-button {
+  background-image: url('../images/shake.svg');
+}
+
+.OtherUnknow-filter-button {
+  background-image: url('../images/other.svg');
+}
+
+.Cocoa-filter-button {
+  background-image: url('../images/cocoa.svg');
+}

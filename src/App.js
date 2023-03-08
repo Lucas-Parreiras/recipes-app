@@ -3,6 +3,7 @@ import './App.css';
 import './css/Recipes.css';
 import './css/Footer.css';
 import './css/DoneRecipes.css';
+import './css/RecipesCategoriesImages.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { Route, Switch } from 'react-router-dom';
 import Login from './pages/Login';

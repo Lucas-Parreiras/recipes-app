@@ -48,12 +48,15 @@
 gap:10px;
   overflow-x:auto;
   scroll-behavior:smooth;
+ 
+ 
 
 
 
 }
 .itemCarrosel{
   display: flex;
+ 
   align-items: center;
  text-align: center;
   padding: 50px;
@@ -66,6 +69,11 @@ gap:10px;
 }
 .titleCarrosel{
 color: #0fa36b;
+}
+.btn-start-recipe {
+  bottom: 0px;
+  position: fixed;
+  z-index: 999;
 }
 @keyframes shake {
 

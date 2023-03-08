@@ -1,6 +1,5 @@
 import { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
-
 import { useLocation } from 'react-router-dom';
 import { mealAPI, cockTailAPI } from '../helpers/APIsHandle';
 
@@ -54,12 +53,11 @@ function RecipeDetails({ match }) {
 
   const ingredients = Object.entries(recipeData)
     .filter(([key]) => key.includes('Ingredient') && recipeData[key])
-    // eslint-disable-next-line no-unused-vars
     .map(([key, value], index) => ({
       name: value,
 
       measure: recipeData[`strMeasure${index + 1}`],
-      key: `ingredient-${index}`,
+      key: { key },
     }));
 
   return (
@@ -135,6 +133,17 @@ function RecipeDetails({ match }) {
 
         ))}
       </div>
+      {/* <Link to={ RecipeInprogress }> */}
+      <div>
+        <button
+          data-testid="start-recipe-btn"
+          type="button"
+          className="btn-start-recipe"
+        >
+          Start Recipe
+        </button>
+      </div>
+      {/* </Link> */}
     </div>
   );
 }
@@ -145,11 +154,6 @@ RecipeDetails.propTypes = {
       id: PropTypes.string.isRequired,
     }).isRequired,
   }).isRequired,
-
-  category: PropTypes.string.isRequired,
-  instructions: PropTypes.string.isRequired,
-  ingredients: PropTypes.array.isRequired,
-  video: PropTypes.string.isRequired,
 };
 
 export default RecipeDetails;

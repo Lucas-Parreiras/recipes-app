@@ -1,11 +1,12 @@
 import React, { useEffect, useState, useCallback, useContext } from 'react';
 import { useLocation } from 'react-router-dom';
+import CardRecipe from '../components/CardRecipe';
 import Footer from '../components/Footer';
 import Header from '../components/Header';
 import RecipeContext from '../context/RecipeContext';
 import { cockTailAPI, mealAPI } from '../helpers/APIsHandle';
-import Drinks from './Drinks';
-import Meals from './Meals';
+// import Drinks from './Drinks';
+// import Meals from './Meals';
 
 function Recipes() {
   const [firstRender, setFirstRender] = useState(true);
@@ -129,20 +130,22 @@ function Recipes() {
           <div>
             {(pathname === '/meals')
               ? recipes.map(({ idMeal, strMeal, strMealThumb }, index) => (
-                <Meals
+                <CardRecipe
+                  recipeType="meals"
                   key={ idMeal }
-                  strMeal={ strMeal }
-                  strMealThumb={ strMealThumb }
-                  idMeal={ idMeal }
+                  recipeName={ strMeal }
+                  recipeThumb={ strMealThumb }
+                  id={ idMeal }
                   index={ index }
                 />
               ))
               : recipes.map(({ idDrink, strDrink, strDrinkThumb }, index) => (
-                <Drinks
+                <CardRecipe
+                  recipeType="drinks"
                   key={ idDrink }
-                  strDrink={ strDrink }
-                  strDrinkThumb={ strDrinkThumb }
-                  idDrink={ idDrink }
+                  recipeName={ strDrink }
+                  recipeThumb={ strDrinkThumb }
+                  id={ idDrink }
                   index={ index }
                 />
               )) }

@@ -16,11 +16,12 @@ export default function Profile() {
   };
 
   useEffect(() => {
-    if (JSON.parse(localStorage.getItem('user'))) {
-      const getLSData = JSON.parse(localStorage.getItem('user'));
-      const emailToRender = getLSData.email;
-      setUserEmail(emailToRender);
+    if (!JSON.parse(localStorage.getItem('user'))) {
+      localStorage.setItem('user', JSON.stringify({ email: 'LS_error' }));
     }
+    const getLSData = JSON.parse(localStorage.getItem('user'));
+    const emailToRender = getLSData.email;
+    setUserEmail(emailToRender);
   }, []);
 
   return (

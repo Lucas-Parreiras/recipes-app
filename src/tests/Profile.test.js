@@ -1,7 +1,6 @@
 import { screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import React from 'react';
-import { act } from 'react-dom/test-utils';
 import App from '../App';
 import renderWithRouter from './renderWithRouter.js/renderWithRouter';
 
@@ -50,21 +49,29 @@ describe('Testes da página Profile', () => {
 });
 
 describe('Simulação de estado do localStorage', () => {
-  // it('Verifica se quando localStorage === null, o email não é renderizado', () => {
-  //   localStorage.setItem('user', JSON.stringify(null));
-  //   console.log(JSON.parse(localStorage.getItem('user')));
-  //   const { history } = renderWithRouter(<App />);
-  //   act(() => history.push('/profile'));
-  //   const email = screen.getByTestId(PROFILE_EMAIL);
-  //   expect(email).toHaveTextContent('none');
-  // });
-
-  it('Verifica se quando localStorage !== null, a informação contida nele é renderizada', () => {
-    localStorage.setItem('user', JSON.stringify({ email: USER_EMAIL }));
+  it('Verifica se nada é renderizado na situação hipotética em que as informações do Local Storage são apagadas', async () => {
     const { history } = renderWithRouter(<App />);
-    act(() => history.push('/profile'));
+    // renderiza elementos da tela de Login para informar os dados
+    const inputEmail = screen.getByTestId(EMAIL_INPUT);
+    const inputPwd = screen.getByTestId(PASSWORD_INPUT);
+    const btnLogin = screen.getByTestId(LOGIN_SUBMIT_BTN);
+    // interação com campos e botões
+    userEvent.type(inputEmail, USER_EMAIL);
+    userEvent.type(inputPwd, '1234567');
+    userEvent.click(btnLogin);
+    // evento hipotético de deleção dos dados do Local Storage
+    localStorage.clear();
+    console.log(JSON.parse(localStorage.getItem('user')));
+    // renderiza tela inicial, para clicar no ícone do Profile
+    const btnProfile = await screen.findByTestId(PROFILE_TOP_BTN);
+    userEvent.click(btnProfile);
+    // aguarda redirecionamento para a rota /profile
+    await waitFor(async () => {
+      const { pathname } = history.location;
+      expect(pathname).toBe('/profile');
+    });
     const email = screen.getByTestId(PROFILE_EMAIL);
-    expect(email).toHaveTextContent('teste@teste.com');
+    expect(email).toHaveTextContent(/LS_error/i);
   });
 });
 

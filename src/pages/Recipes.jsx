@@ -5,8 +5,8 @@ import Footer from '../components/Footer';
 import Header from '../components/Header';
 import RecipeContext from '../context/RecipeContext';
 import { cockTailAPI, mealAPI } from '../helpers/APIsHandle';
-// import drinksTitle from '../images/drinksTitle.svg';
-// import mealsTitle from '../images/mealsTitle.svg';
+import drinksTitle from '../images/drinkIcon.svg';
+import mealsTitle from '../images/mealIcon.svg';
 // import Drinks from './Drinks';
 // import Meals from './Meals';
 
@@ -106,6 +106,9 @@ function Recipes() {
     <div className="main-container">
       <Header />
       <header className="recipes-page-title">
+        { pathname === '/meals'
+          ? <img src={ mealsTitle } alt="imagem de um prato" />
+          : <img src={ drinksTitle } alt="imagem de um prato" /> }
         <h1 data-testid="page-title">
           { pathname === '/meals' ? 'Meals' : 'Drinks'}
         </h1>

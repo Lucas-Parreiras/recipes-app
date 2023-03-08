@@ -1,13 +1,23 @@
 .recipes-page-title {
   display: flex;
-  justify-content: center;
+  align-items: center;
   padding: 0 2% 10px;
-
+  flex-direction: column;
   /* background-color: red; */
 }
 
+.recipes-page-title h1 {
+  text-transform: uppercase ;
+  letter-spacing: 0.105em;
+  text-transform: uppercase;
+  font-weight: 700;
+  color: #41197F;
+  font-size: 28px;
+}
+
 .recipes-page-title img {
-  width: 270px;
+  width: 50px;
+  margin-bottom: 15px;
 }
 
 .categories-container {
@@ -120,10 +130,6 @@
 }
 
 @media screen and ( max-width : 550px ) {
-
-  .recipes-page-title img {
-    width: 190px;
-  }
 
   .categories-container input {
     background-size: 100% 100%;

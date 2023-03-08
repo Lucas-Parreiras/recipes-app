@@ -40,7 +40,7 @@ describe('FavoriteRecipes', () => {
       </BrowserRouter>,
     );
     expect(screen.getByTestId('filter-by-all-btn')).toBeInTheDocument();
-    fireEvent.click(screen.getByTestId('filter-by-all-btn'));
+    fireEvent.click(screen.getByTestId('filter-by-all-btn')); // adicionado
   });
 
   it('Renderiza detalhes', () => {

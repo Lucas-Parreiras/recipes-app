@@ -1,12 +1,13 @@
 import { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
-import { useLocation } from 'react-router-dom';
+import { useLocation, useHistory } from 'react-router-dom';
 import { mealAPI, cockTailAPI } from '../helpers/APIsHandle';
 
 function RecipeDetails({ match }) {
   const { id } = match.params;
   const [recipeData, setRecipeData] = useState({});
   const [recommendations, setRecommendations] = useState([]);
+  const history = useHistory();
 
   const location = useLocation();
   const isMeal = location.pathname.includes('meals');
@@ -59,6 +60,10 @@ function RecipeDetails({ match }) {
       measure: recipeData[`strMeasure${index + 1}`],
       key: { key },
     }));
+  const handleClickSetRecepies = () => {
+    const path = isDrink ? `/drinks/${id}/in-progress` : `/meals/${id}/in-progress`;
+    history.push(path);
+  };
 
   return (
     <div>
@@ -139,6 +144,7 @@ function RecipeDetails({ match }) {
           data-testid="start-recipe-btn"
           type="button"
           className="btn-start-recipe"
+          onClick={ handleClickSetRecepies }
         >
           Start Recipe
         </button>

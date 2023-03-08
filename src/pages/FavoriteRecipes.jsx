@@ -7,8 +7,8 @@ import Footer from '../components/Footer';
 
 function FavoriteRecipes() {
   const history = useHistory();
-  const [linkC, setLinkC] = useState('');
   const [fav, setFav] = useState([]);
+  const [linkC, setLinkC] = useState('');
   const [fill, setFill] = useState([]);
 
   const handleLocalStorage = (e) => { // Define uma função que recebe um parâmetro e busca o valor correspondente no localStorage
@@ -99,14 +99,15 @@ function FavoriteRecipes() {
 
               <Link to={ `${e.type}s/${e.id}` }>
                 <img
+                  data-testid={ `${index}-horizontal-image` }
                   src={ e.image }
                   alt={ e.name }
-                  data-testid={ `${index}-horizontal-image` }
                   style={ { width: '80px' } }
                 />
                 <p data-testid={ `${index}-horizontal-top-text` }>
                   {e.type === 'meal'
-                    ? `${e.nationality} - ${e.category}`
+                    ? `${e.nationality} 
+                    - ${e.category}`
                     : e.alcoholicOrNot}
                 </p>
                 <p data-testid={ `${index}-horizontal-name` }>{e.name}</p>
@@ -114,18 +115,18 @@ function FavoriteRecipes() {
 
               <button type="button" onClick={ () => handleChangeShare(e) }>
                 <img
+                  data-testid={ `${index}-horizontal-share-btn` }
                   src={ shareIcon }
                   alt="Share Icon"
-                  data-testid={ `${index}-horizontal-share-btn` }
                 />
               </button>
 
-              <button type="button" onClick={ () => handleSelectUnFav(e.id) }>
+              <button type="button" onClick={ handleSelectUnFav }>
                 <img
+                  data-testid={ `${index}-horizontal-favorite-btn` }
                   src={ blackHeartIcon }
                   alt="Black Heart Icon"
                   name={ e.id }
-                  data-testid={ `${index}-horizontal-favorite-btn` }
                 />
               </button>
             </div>

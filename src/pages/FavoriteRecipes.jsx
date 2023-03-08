@@ -11,17 +11,15 @@ function FavoriteRecipes() {
   const [linkC, setLinkC] = useState('');
   const [fill, setFill] = useState([]);
 
-  const handleLocalStorage = (e) => { // Define uma função que recebe um parâmetro e busca o valor correspondente no localStorage
-    const localStaorage = localStorage.getItem(e);
-    return JSON.parse(localStaorage);
-  };
-
   useEffect(() => { // Define um hook de efeito que atualiza o estado "fill" quando "fav" é atualizado
     setFill(fav);
   }, [fav]);
 
   useEffect(() => { // Define um hook de efeito que busca dados do localStorage e atualiza o estado "fav" quando o componente é montado
-    const listaLocaLStorage = handleLocalStorage('favoriteRecipes');
+    if (!JSON.parse(localStorage.getItem('favoriteRecipes'))) {
+      localStorage.setItem('favoriteRecipes', JSON.stringify([{ error: 'LS_error' }]));
+    }
+    const listaLocaLStorage = JSON.parse(localStorage.getItem('favoriteRecipes'));
     setFav(listaLocaLStorage);
   }, []);
 
@@ -63,6 +61,7 @@ function FavoriteRecipes() {
 
     <div>
       <Header pathName={ evento } canSearch={ false } />
+      <h1 data-testid="page-title">Favorite Recipes</h1>
       <div>
 
         <section>

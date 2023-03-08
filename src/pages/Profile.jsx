@@ -11,18 +11,17 @@ import '../css/Profile.css';
 export default function Profile() {
   const [userEmail, setUserEmail] = useState('');
 
-  const getEmail = () => {
-    const { email } = JSON.parse(localStorage.getItem('user'));
-    setUserEmail(email);
-  };
-
-  useEffect(() => {
-    getEmail();
-  }, []);
-
   const clearLocalStorage = () => {
     localStorage.clear();
   };
+
+  useEffect(() => {
+    if (JSON.parse(localStorage.getItem('user'))) {
+      const getLSData = JSON.parse(localStorage.getItem('user'));
+      const emailToRender = getLSData.email;
+      setUserEmail(emailToRender);
+    }
+  }, []);
 
   return (
     <div>
@@ -52,6 +51,7 @@ export default function Profile() {
           <p>Logout</p>
         </Link>
       </section>
+
       <Footer />
     </div>
   );

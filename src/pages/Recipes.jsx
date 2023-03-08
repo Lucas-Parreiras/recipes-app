@@ -106,9 +106,11 @@ function Recipes() {
     <div className="main-container">
       <Header />
       <header className="recipes-page-title">
+
         { pathname === '/meals'
           ? <img src={ mealsTitle } alt="imagem de um prato" />
           : <img src={ drinksTitle } alt="imagem de um prato" /> }
+
         <h1 data-testid="page-title">
           { pathname === '/meals' ? 'Meals' : 'Drinks'}
         </h1>

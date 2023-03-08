@@ -15,6 +15,10 @@ p {
   width: 100vw;
 }
 
+.userInfo > img {
+  width: 70px;
+}
+
 .links > a > img {
   margin: 10px;
   width: 300px;
@@ -28,9 +32,6 @@ p {
 }
 
 .userInfo > h5 {
-  margin: 20px;
   font-weight: 700;
-}
-.userInfo > img {
-  width: 70px;
+  margin: 20px;
 }

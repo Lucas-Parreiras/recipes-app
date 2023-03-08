@@ -38,7 +38,7 @@ function FavoriteRecipes() {
     }
   };
 
-  const handleAllBtn = () => { setFill(fav); }; // Define uma função que atualiza o estado "fill" para exibir todas as receitas favoritas
+  // const handleAllBtn = () => { setFill(fav); }; // Define uma função que atualiza o estado "fill" para exibir todas as receitas favoritas
 
   const handleSelectUnFav = ({ target }) => { // Define uma função que remove uma receita favorita pelo seu ID
     const id = target.name;
@@ -66,7 +66,11 @@ function FavoriteRecipes() {
 
         <section>
           {linkC}
-          <button type="button" data-testid="filter-by-all-btn" onClick={ handleAllBtn }>
+          <button
+            type="button"
+            data-testid="filter-by-all-btn"
+            onClick={ handleFilterByMealsAndDrinks }
+          >
             Tudo
           </button>
 

@@ -1,9 +1,12 @@
 import { act } from 'react-dom/test-utils';
 import { screen } from '@testing-library/react';
+import copy from 'clipboard-copy';
 import userEvent from '@testing-library/user-event';
 import App from '../App';
 import doneRecipes from './mocks/localStorageDoneRecipesMock';
 import renderWithRouter from './renderWithRouter.js/renderWithRouter';
+
+jest.mock('clipboard-copy');
 
 const ROUTE = '/done-recipes';
 
@@ -46,14 +49,33 @@ describe('Teste do componente DoneRecipes.jsx', () => {
     expect(filteredRecipe).toBeInTheDocument();
   });
 
-  // it('Testa o botão compartilhar', async () => {
-  //   window.localStorage.setItem('doneRecipes', JSON.stringify(doneRecipes));
-  //   const { history } = renderWithRouter(<App />);
+  it('Testa o botão compartilhar receita (meal)', async () => {
+    window.localStorage.setItem('doneRecipes', JSON.stringify(doneRecipes));
+    copy.mockImplementation(() => {});
+    const { history } = renderWithRouter(<App />);
 
-  //   act(() => history.push(ROUTE));
+    act(() => history.push(ROUTE));
 
-  //   const shareButton = await screen.findByTestId('0-horizontal-share-btn');
-  //   expect(shareButton.parentElement).toBeInTheDocument();
-  //   userEvent.click(shareButton.parentElement);
-  // });
+    const shareButton = await screen.findByTestId('0-horizontal-share-btn');
+    expect(shareButton.parentElement).toBeInTheDocument();
+    userEvent.click(shareButton.parentElement);
+    expect(copy).toHaveBeenCalledWith('http://localhost:3000/meals/52771');
+    expect(shareButton).not.toBeInTheDocument();
+    expect(screen.getByText(/link copied!/i)).toBeInTheDocument();
+  });
+
+  it('Testa o botão compartilhar receita (drink)', async () => {
+    window.localStorage.setItem('doneRecipes', JSON.stringify(doneRecipes));
+    copy.mockImplementation(() => {});
+    const { history } = renderWithRouter(<App />);
+
+    act(() => history.push(ROUTE));
+
+    const shareButton = await screen.findByTestId('1-horizontal-share-btn');
+    expect(shareButton.parentElement).toBeInTheDocument();
+    userEvent.click(shareButton.parentElement);
+    expect(copy).toHaveBeenCalledWith('http://localhost:3000/drinks/178319');
+    expect(shareButton).not.toBeInTheDocument();
+    expect(screen.getByText(/link copied!/i)).toBeInTheDocument();
+  });
 });

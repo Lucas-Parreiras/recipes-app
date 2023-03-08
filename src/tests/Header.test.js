@@ -1,27 +1,59 @@
 import React from 'react';
 import { render, screen, fireEvent } from '@testing-library/react';
-import { MemoryRouter, Route } from 'react-router-dom';
+import { MemoryRouter, Router, Route } from 'react-router-dom';
 import userEvent from '@testing-library/user-event';
+import { createMemoryHistory } from 'history';
 import Header from '../components/Header';
-import Meals from '../pages/Meals';
 import renderWithRouter from './renderWithRouter.js/renderWithRouter';
+import App from '../App';
+import mealRecipesApiMock from './mocks/mealRecipesApiMock';
 
 describe('Header', () => {
-  it('Testando se renderiza as telas drinks e meals', () => {
+  let searchButton;
+
+  describe('renderização', () => {
+    it('renderiza o botão de busca na tela de bebidas', () => {
+      render(
+        <MemoryRouter initialEntries={ ['/drinks'] }>
+          <Route path="/drinks">
+            <Header />
+          </Route>
+        </MemoryRouter>,
+      );
+
+      searchButton = screen.getByTestId('search-top-btn');
+
+      expect(searchButton).toBeInTheDocument();
+    });
+
+    it('não renderiza o botão de busca na tela de perfil', () => {
+      render(
+        <MemoryRouter initialEntries={ ['/profile'] }>
+          <Route path="/profile">
+            <Header />
+          </Route>
+        </MemoryRouter>,
+      );
+
+      expect(searchButton).not.toBeInTheDocument();
+    });
+  });
+
+  it('não renderiza o componente SearchBar inicialmente', () => {
     render(
-      <MemoryRouter initialEntries={ ['/drinks'] }>
-        <Route path="/drinks">
-          <Header />
-        </Route>
+      <MemoryRouter>
+        <Header />
       </MemoryRouter>,
     );
 
-    const searchButton = screen.getByTestId('search-top-btn');
+    const searchBar = screen.queryByTestId('search-bar');
 
-    expect(searchButton).toBeInTheDocument();
+    expect(searchBar).not.toBeInTheDocument();
   });
+});
 
-  it('toggles showSearch state when button is clicked', () => {
+describe('comportamento', () => {
+  it('ao clicar no botão de busca, o componente SearchBar é renderizado', () => {
     render(
       <MemoryRouter initialEntries={ ['/drinks'] }>
         <Route path="/drinks">
@@ -33,14 +65,36 @@ describe('Header', () => {
     const searchButton = screen.getByTestId('search-top-btn');
     fireEvent.click(searchButton);
 
-    expect(searchButton).toBeInTheDocument();
+    const searchBar = screen.getByTestId('search-bar');
+
+    expect(searchBar).toBeInTheDocument();
   });
 
-  it('Testa redirecionamento da rota /Meals', () => {
-    const { history } = renderWithRouter(<Meals />);
-    const btn = screen.getByRole('img', { name: /profile/i });
-    expect(btn).toBeInTheDocument();
-    userEvent.click(btn);
+  it('ao clicar no botão de perfil, o usuário é redirecionado para /profile', () => {
+    const history = createMemoryHistory();
+    render(
+      <Router history={ history }>
+        <Header />
+      </Router>,
+    );
+
+    const profileButton = screen.getByTestId('profile-top-btn');
+    userEvent.click(profileButton);
+
     expect(history.location.pathname).toBe('/profile');
+  });
+
+  it('ao entrar na rota /meals, o botão de perfil é renderizado', async () => {
+    jest.spyOn(global, 'fetch');
+    global.fetch.mockResolvedValue({
+      json: jest.fn().mockResolvedValue(mealRecipesApiMock),
+    });
+
+    const { history } = renderWithRouter(<App />, { route: '/meals' });
+
+    const profileButton = await screen.findByTestId('profile-top-btn');
+
+    expect(profileButton).toBeInTheDocument();
+    expect(history.location.pathname).toBe('/meals');
   });
 });

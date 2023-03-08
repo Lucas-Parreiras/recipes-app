@@ -1,10 +1,10 @@
-import PropTypes from 'prop-types';
 import React, { useState } from 'react';
 import { useHistory, useLocation } from 'react-router-dom';
 import profileIcon from '../images/profileIcon.svg';
 import searchIcon from '../images/searchIcon.svg';
+import SearchBar from './SearchBar';
 
-export default function Header({ title }) {
+export default function Header() {
   const history = useHistory();
   const location = useLocation();
   const [showSearch, setShowSearch] = useState(true);
@@ -27,7 +27,6 @@ export default function Header({ title }) {
 
   return (
     <>
-      <h1 data-testid="page-title">{title}</h1>
       {renderSearch()}
       <br />
       <br />
@@ -43,18 +42,11 @@ export default function Header({ title }) {
       <div>
         {!showSearch && (
           <form>
-            <input
-              data-testid="search-input"
-              type="text"
-              placeholder="Pesquisar..."
-            />
+            <SearchBar />
+            { /* incluída chamada ao componente SearchBar */}
           </form>
         )}
       </div>
     </>
   );
 }
-
-Header.propTypes = {
-  title: PropTypes.string.isRequired,
-};

@@ -1,0 +1,34 @@
+.categories-container {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 10px;
+}
+
+.categories-container button {
+  font-size: 12px;
+  margin-left: 10px;
+}
+
+.recipes-container {
+  align-items: center;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  padding-bottom: 75px;
+}
+
+.recipe-card {
+  align-items: center;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  transition: 0.5s;
+}
+
+.recipe-card:hover {
+  transform: scale(1.05);
+}
+
+.recipe-card img {
+  width: 350px;
+}

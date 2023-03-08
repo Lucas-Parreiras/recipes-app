@@ -1,5 +1,6 @@
 import PropTypes from 'prop-types';
 import React, { useState } from 'react';
+import copy from 'clipboard-copy';
 import image from '../images/shareIcon.svg';
 import greenCheck from '../images/greenCheck.png';
 
@@ -8,19 +9,7 @@ export default function ShareRecipeButton({ index, id, type }) {
 
   const copyLinkToClipBoard = () => {
     const TIME = 4000;
-
-    if (type === 'meal') {
-      navigator.clipboard.writeText(
-        `http://localhost:3000/meals/${id}`,
-      );
-      console.log('copiado meal');
-    } else if (type === 'drink') {
-      navigator.clipboard.writeText(
-        `http://localhost:3000/drinks/${id}`
-        ,
-      );
-    }
-
+    copy(`http://localhost:3000/${type}s/${id}`);
     setShowLinkCopiedMessage(true);
     setTimeout(() => setShowLinkCopiedMessage(false), TIME);
   };

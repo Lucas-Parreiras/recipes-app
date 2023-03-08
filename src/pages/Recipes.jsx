@@ -125,32 +125,31 @@ function Recipes() {
         )) }
       </div>
 
-      <div className="recipes-container">
-        { recipes !== null && (
-          <div>
-            {(pathname === '/meals')
-              ? recipes.map(({ idMeal, strMeal, strMealThumb }, index) => (
-                <CardRecipe
-                  recipeType="meals"
-                  key={ idMeal }
-                  recipeName={ strMeal }
-                  recipeThumb={ strMealThumb }
-                  id={ idMeal }
-                  index={ index }
-                />
-              ))
-              : recipes.map(({ idDrink, strDrink, strDrinkThumb }, index) => (
-                <CardRecipe
-                  recipeType="drinks"
-                  key={ idDrink }
-                  recipeName={ strDrink }
-                  recipeThumb={ strDrinkThumb }
-                  id={ idDrink }
-                  index={ index }
-                />
-              )) }
-          </div>)}
-      </div>
+      { recipes !== null && (
+        <div className="recipes-container">
+
+          {(pathname === '/meals')
+            ? recipes.map(({ idMeal, strMeal, strMealThumb }, index) => (
+              <CardRecipe
+                recipeType="meals"
+                key={ idMeal }
+                recipeName={ strMeal }
+                recipeThumb={ strMealThumb }
+                id={ idMeal }
+                index={ index }
+              />
+            ))
+            : recipes.map(({ idDrink, strDrink, strDrinkThumb }, index) => (
+              <CardRecipe
+                recipeType="drinks"
+                key={ idDrink }
+                recipeName={ strDrink }
+                recipeThumb={ strDrinkThumb }
+                id={ idDrink }
+                index={ index }
+              />
+            )) }
+        </div>)}
       <Footer />
     </div>
 

@@ -27,11 +27,11 @@ export default function Profile() {
   return (
     <div>
       <Header />
-      <h1 data-testid="page-title">Profile</h1>
 
       <section className="userInfo">
         <img src={ profileIconRound } alt="Profile Icon" />
-        <h5 data-testid="profile-email">{userEmail}</h5>
+        <h1 data-testid="page-title">Profile</h1>
+        <h6 data-testid="profile-email">{userEmail}</h6>
       </section>
 
       <section className="links">
@@ -39,10 +39,12 @@ export default function Profile() {
           <img src={ doneIcon } alt="Link Done Recipes" />
           <p>Done Recipes</p>
         </Link>
+        <hr />
         <Link to="/favorite-recipes" data-testid="profile-favorite-btn">
           <img src={ favoritesIcon } alt="Link Favorite Recipes" />
           <p>Favorite Recipes</p>
         </Link>
+        <hr />
         <Link
           to="/"
           data-testid="profile-logout-btn"

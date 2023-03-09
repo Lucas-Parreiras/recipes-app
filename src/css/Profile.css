@@ -1,3 +1,9 @@
+hr {
+  margin-left: auto;
+  margin-right: auto;
+  width: 80vw;
+}
+
 .links a p {
   display: none;
   width: 100vw;
@@ -16,12 +22,13 @@
 }
 
 .userInfo > img {
-  width: 70px;
+  margin-bottom: 10px;
+  width: 50px;
 }
 
 .links > a > img {
   margin: 10px;
-  width: 300px;
+  width: 250px;
 }
 
 .userInfo {
@@ -31,7 +38,14 @@
   margin: 20px;
 }
 
-.userInfo > h5 {
+.userInfo > h1 {
+  color: #41197f;
+  font-size: larger;
+  font-weight: 600;
+  text-transform: uppercase;
+}
+
+.userInfo > h6 {
   font-weight: 700;
   margin: 20px;
 }

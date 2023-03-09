@@ -1,13 +1,13 @@
-import React, { useState } from 'react';
+import React, { useContext } from 'react';
 import { useHistory, useLocation } from 'react-router-dom';
+import RecipeContext from '../context/RecipeContext';
 import profileIcon from '../images/profileIcon.svg';
 import searchIcon from '../images/searchIcon.svg';
-import SearchBar from './SearchBar';
 
 export default function Header() {
   const history = useHistory();
   const location = useLocation();
-  const [showSearch, setShowSearch] = useState(true);
+  const { showSearch, setShowSearch } = useContext(RecipeContext);
 
   //  verifica o caminho atual da página, se é meals ou drink
   const renderSearch = () => {
@@ -39,14 +39,6 @@ export default function Header() {
       </button>
       <br />
       <br />
-      <div>
-        {!showSearch && (
-          <form>
-            <SearchBar />
-            { /* incluída chamada ao componente SearchBar */}
-          </form>
-        )}
-      </div>
     </>
   );
 }

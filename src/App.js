@@ -10,6 +10,7 @@ import DoneRecipes from './pages/DoneRecipes';
 import FavoriteRecipes from './pages/FavoriteRecipes';
 import RecipeInProgress from './pages/RecipeInProgress';
 import Recipes from './pages/Recipes';
+import './css/RecipeDetails.css';
 
 // Conferir complementação do id do component RecipeDetails.
 // Conferir uso das páginas Drinks e Meals.

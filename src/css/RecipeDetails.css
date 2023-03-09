@@ -1,0 +1,71 @@
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body { background-color: white;
+  margin: 20px;
+  text-align: center;
+}
+
+.imagem {
+  border-radius: 20%;
+  max-width: 60%;
+}
+
+.container-carrosel {
+  display: flex;
+  gap: 10px;
+  overflow-x: auto;
+  scroll-behavior: smooth;
+
+}
+
+.itemCarrosel {
+  align-items: center;
+  display: flex;
+  margin: 0 10px;
+  padding: 50px;
+  text-align: center;
+}
+
+.imagemCarrosel {
+  border-radius: 20%;
+  max-width: 230px;
+}
+
+.titleCarrosel {
+  color: #0fa36b;
+}
+
+.btn-start-recipe {
+  background-color: rgb(195, 166, 25);
+  border: solid 2px rgb(163, 138, 29);
+  border-radius: 10px;
+  bottom: 0;
+  color: whitesmoke;
+  left: 230px;
+  padding: 5px;
+  position: fixed;
+
+}
+
+.btn-compartilhar-recipe {
+  background-color: rgb(195, 166, 25);
+  border: solid 2px rgb(163, 138, 29);
+  border-radius: 10px;
+  bottom: 0;
+  color: whitesmoke;
+  padding: 5px;
+
+}
+
+.btn-favorite-recipe {
+  background-color: rgb(195, 166, 25);
+  border: solid 2px rgb(163, 138, 29);
+  border-radius: 10px;
+  bottom: 0;
+  color: whitesmoke;
+  padding: 5px;
+}

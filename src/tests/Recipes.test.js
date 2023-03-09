@@ -50,7 +50,7 @@ describe('Testes da página de receitas', () => {
     });
     const teste1 = await screen.findByText(/corba/i);
     const teste2 = await screen.findByText(/kumpir/i);
-    const filterButton = await screen.findByRole('button', { name: /beef/i });
+    const filterButton = await screen.findByTestId('Beef-category-filter');
     expect(teste1).toBeInTheDocument();
     expect(teste2).toBeInTheDocument();
     expect(filterButton).toBeInTheDocument();
@@ -58,7 +58,7 @@ describe('Testes da página de receitas', () => {
     // expect(teste1).not.toBeInTheDocument();
     const filteredMeal = await screen.findByText(/big mac/i);
     expect(filteredMeal).toBeInTheDocument();
-    const rmvFilter = await screen.findByRole('button', { name: /all/i });
+    const rmvFilter = await screen.findByTestId('All-category-filter');
     expect(rmvFilter).toBeInTheDocument();
     userEvent.click(rmvFilter);
     expect(await screen.findByText(/corba/i)).toBeInTheDocument();
@@ -83,7 +83,7 @@ describe('Testes da página de receitas', () => {
 
     const filteredDrink = await screen.findByText(/gg/i);
     expect(filteredDrink).toBeInTheDocument();
-    const rmvFilter = await screen.findByRole('button', { name: /all/i });
+    const rmvFilter = await screen.findByTestId('All-category-filter');
     expect(rmvFilter).toBeInTheDocument();
     userEvent.click(rmvFilter);
     expect(await screen.findByText(/acid/i)).toBeInTheDocument();

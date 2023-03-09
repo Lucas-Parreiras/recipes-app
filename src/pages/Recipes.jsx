@@ -1,14 +1,19 @@
-import React, { useEffect, useState, useCallback } from 'react';
+import React, { useEffect, useState, useCallback, useContext } from 'react';
 import { useLocation } from 'react-router-dom';
+import CardRecipe from '../components/CardRecipe';
+import Footer from '../components/Footer';
 import Header from '../components/Header';
+import RecipeContext from '../context/RecipeContext';
 import { cockTailAPI, mealAPI } from '../helpers/APIsHandle';
-import Drinks from './Drinks';
-import Meals from './Meals';
+import drinksTitle from '../images/drinkIcon.svg';
+import mealsTitle from '../images/mealIcon.svg';
+// import Drinks from './Drinks';
+// import Meals from './Meals';
 
 function Recipes() {
   const [firstRender, setFirstRender] = useState(true);
   // criação de estado local para armazenamento das receitas obtidas
-  const [recipes, setRecipes] = useState([]);
+  const { recipes, setRecipes } = useContext(RecipeContext);
   // criação de estado local para armazenamento das categorias obtidas
   const [categories, setCatgories] = useState([]);
   // criação de estado local para armazenamento da lista de receitas sem filtros aplicados
@@ -37,7 +42,7 @@ function Recipes() {
       setOriginalRecipes([...newRecipesList]);
       setFirstRender(false);
     }
-  }, [firstRender]);
+  }, [firstRender, setRecipes]); // precisava chamar o setRecipes nessa linha
 
   const getFiveCategories = (categoriesList, categoryType) => {
     const LIMIT = 5;
@@ -99,48 +104,71 @@ function Recipes() {
 
   return (
     <div className="main-container">
-      <Header title={ pathname === '/meals' ? 'Meals' : 'Drinks' } />
+      <Header />
+      <header className="recipes-page-title">
+
+        { pathname === '/meals'
+          ? <img src={ mealsTitle } alt="imagem de um prato" />
+          : <img src={ drinksTitle } alt="imagem de um prato" /> }
+
+        <h1 data-testid="page-title">
+          { pathname === '/meals' ? 'Meals' : 'Drinks'}
+        </h1>
+      </header>
       <div className="categories-container">
-        <button
+        <input
+          type="button"
           data-testid="All-category-filter"
           onClick={ removeAppliedFilters }
-        >
-          All
-        </button>
+          className={
+            pathname === '/meals'
+              ? 'all-meals-filter-button'
+              : 'all-drinks-filter-button'
+          }
+        />
         { categories.map(({ strCategory }, index) => (
-          <button
+          <input
+            type="button"
             name={ strCategory }
             data-testid={ `${strCategory}-category-filter` }
             key={ index }
             onClick={ applyFilterByCategory }
-          >
-            { strCategory }
-          </button>
+            className={ `${
+              strCategory.split(' ').join('-')
+                === 'Other-/-Unknown'
+                ? 'OtherUnknow'
+                : strCategory.split(' ').join('-')
+            }-filter-button` }
+          />
         )) }
       </div>
 
-      <div className="recipes-container">
-        {pathname === '/meals'
-          ? recipes.map(({ idMeal, strMeal, strMealThumb }, index) => (
-            <Meals
-              key={ idMeal }
-              strMeal={ strMeal }
-              strMealThumb={ strMealThumb }
-              idMeal={ idMeal }
-              index={ index }
-            />
-          ))
-          : recipes.map(({ idDrink, strDrink, strDrinkThumb }, index) => (
-            <Drinks
-              key={ idDrink }
-              strDrink={ strDrink }
-              strDrinkThumb={ strDrinkThumb }
-              idDrink={ idDrink }
-              index={ index }
-            />
-          )) }
-      </div>
+      { recipes !== null && (
+        <div className="recipes-container">
 
+          {(pathname === '/meals')
+            ? recipes.map(({ idMeal, strMeal, strMealThumb }, index) => (
+              <CardRecipe
+                recipeType="meals"
+                key={ idMeal }
+                recipeName={ strMeal }
+                recipeThumb={ strMealThumb }
+                id={ idMeal }
+                index={ index }
+              />
+            ))
+            : recipes.map(({ idDrink, strDrink, strDrinkThumb }, index) => (
+              <CardRecipe
+                recipeType="drinks"
+                key={ idDrink }
+                recipeName={ strDrink }
+                recipeThumb={ strDrinkThumb }
+                id={ idDrink }
+                index={ index }
+              />
+            )) }
+        </div>)}
+      <Footer />
     </div>
 
   );

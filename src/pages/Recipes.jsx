@@ -3,6 +3,7 @@ import { useLocation } from 'react-router-dom';
 import CardRecipe from '../components/CardRecipe';
 import Footer from '../components/Footer';
 import Header from '../components/Header';
+import SearchBar from '../components/SearchBar';
 import RecipeContext from '../context/RecipeContext';
 import { cockTailAPI, mealAPI } from '../helpers/APIsHandle';
 import drinksTitle from '../images/drinkIcon.svg';
@@ -12,7 +13,7 @@ import mealsTitle from '../images/mealIcon.svg';
 
 function Recipes() {
   const [firstRender, setFirstRender] = useState(true);
-  // criação de estado local para armazenamento das receitas obtidas
+  // declaração do estado global que armazena as receitas obtidas
   const { recipes, setRecipes } = useContext(RecipeContext);
   // criação de estado local para armazenamento das categorias obtidas
   const [categories, setCatgories] = useState([]);
@@ -20,6 +21,8 @@ function Recipes() {
   const [originalRecipes, setOriginalRecipes] = useState([]);
   // criação de estado local para armazenamento do filtro selecionado
   const [selectedFilter, setSelectedFilter] = useState('');
+  // declaração de estado global que controla a renderização da SearchBar
+  const { showSearch } = useContext(RecipeContext);
   // usado para obtenção de dados do navegador a respeito da rota em uso no momento
   const location = useLocation();
   // destruturando apenas o nome da rota em uso
@@ -115,6 +118,7 @@ function Recipes() {
           { pathname === '/meals' ? 'Meals' : 'Drinks'}
         </h1>
       </header>
+      { showSearch && <SearchBar /> }
       <div className="categories-container">
         <input
           type="button"

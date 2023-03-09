@@ -2,6 +2,7 @@ import React, { useContext, useEffect, useState } from 'react';
 import { useHistory, useLocation } from 'react-router-dom';
 import RecipeContext from '../context/RecipeContext';
 import { cockTailAPI, mealAPI } from '../helpers/APIsHandle';
+import '../css/SearchBar.css';
 
 function SearchBar() {
   const { recipes, setRecipes } = useContext(RecipeContext); // armazena as receitas que devem ser renderizadas
@@ -62,57 +63,60 @@ function SearchBar() {
   }, [recipes]);
 
   return (
-    <div>
-      <section className="searchInput">
+    <form className="search-container">
+      <section className="search-input">
         <input
           type="text"
           data-testid="search-input"
           placeholder="Search"
           value={ searchTerm }
           onChange={ handleChange }
+          id="search-input"
         />
       </section>
 
-      <section className="searchOptions">
-        <input
-          type="radio"
-          data-testid="ingredient-search-radio"
-          value="ingredient"
-          id="ingredient"
-          name="searchByType"
-          onChange={ handleChange }
-        />
-        <label htmlFor="ingredient">Ingredient</label>
-        <input
-          type="radio"
-          data-testid="name-search-radio"
-          value="name"
-          id="name"
-          name="searchByType"
-          onChange={ handleChange }
-        />
-        <label htmlFor="name">Name</label>
-        <input
-          type="radio"
-          data-testid="first-letter-search-radio"
-          value="firstLetter"
-          id="firstLetter"
-          name="searchByType"
-          onChange={ handleChange }
-        />
-        <label htmlFor="firstLetter">First Letter</label>
+      <section className="search-options">
+        <div className="search-radio-buttons">
+          <input
+            type="radio"
+            data-testid="ingredient-search-radio"
+            value="ingredient"
+            id="ingredient"
+            name="searchByType"
+            onChange={ handleChange }
+          />
+          <label htmlFor="ingredient">Ingredient</label>
+          <input
+            type="radio"
+            data-testid="name-search-radio"
+            value="name"
+            id="name"
+            name="searchByType"
+            onChange={ handleChange }
+          />
+          <label htmlFor="name">Name</label>
+          <input
+            type="radio"
+            data-testid="first-letter-search-radio"
+            value="firstLetter"
+            id="firstLetter"
+            name="searchByType"
+            onChange={ handleChange }
+          />
+          <label htmlFor="firstLetter">First Letter</label>
+        </div>
+        <section className="searchBtn">
+          <button
+            type="button"
+            data-testid="exec-search-btn"
+            onClick={ () => getRecipes() }
+          >
+            SEARCH
+          </button>
+        </section>
       </section>
 
-      <section className="searchBtn">
-        <button
-          type="button"
-          data-testid="exec-search-btn"
-          onClick={ () => getRecipes() }
-        >
-          Search
-        </button>
-      </section>
-    </div>
+    </form>
   );
 }
 

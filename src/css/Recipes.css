@@ -10,14 +10,14 @@
 .recipes-page-title h1 {
   color: #41197f;
   font-size: 28px;
-  font-weight: 700;
+  font-weight: 900;
   letter-spacing: 0.105em;
   text-transform: uppercase;
 }
 
 .recipes-page-title img {
-  margin-bottom: 15px;
-  width: 50px;
+  margin: 15px 0;
+  width: 60px;
 }
 
 .categories-container {
@@ -69,7 +69,7 @@
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
-  padding-bottom: 75px;
+  padding: 0 2% 60px;
 }
 
 .recipe-card-link {
@@ -84,7 +84,14 @@
   display: flex;
   flex-direction: column;
   margin: 10px;
+  max-width: 250px;
   transition: 0.5s;
+  word-wrap: break-word;
+}
+
+.recipe-name {
+  background-color: red;
+  width: 100%;
 }
 
 .recipe-card p {
@@ -92,9 +99,10 @@
   border-bottom-left-radius: 10px;
   border-bottom-right-radius: 10px;
   color: white;
-  font-size: 18px;
+  font-size: 14px;
   font-weight: 700;
   padding: 10px;
+  text-align: left;
 }
 
 .recipe-card:hover p:after {
@@ -127,13 +135,32 @@
     width: 350px;
   }
 
+  .recipe-card {
+    max-width: 350px;
+  }
+
+  .recipes-container {
+    padding-bottom: 50px;
+  }
 }
 
 @media screen and ( max-width : 550px ) {
 
   .categories-container input {
-    background-size: 100% 100%;
-    height: 120px;
-    width: 200px;
+    background-size: 90% 90%;
+    height: 70px;
+  }
+
+  .recipe-card img {
+    height: 270px;
+    width: 320px;
+  }
+
+  .recipe-card {
+    max-width: 320px;
+  }
+
+  .recipes-container {
+    padding-bottom: 50px;
   }
 }

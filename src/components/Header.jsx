@@ -3,6 +3,9 @@ import { useHistory, useLocation } from 'react-router-dom';
 import RecipeContext from '../context/RecipeContext';
 import profileIcon from '../images/profileIcon.svg';
 import searchIcon from '../images/searchIcon.svg';
+import headerLogo from '../images/header-logo.svg';
+import headerTitle from '../images/header-title.svg';
+import '../css/Header.css';
 
 export default function Header() {
   const history = useHistory();
@@ -26,19 +29,22 @@ export default function Header() {
   };
 
   return (
-    <>
-      {renderSearch()}
-      <br />
-      <br />
-      <button onClick={ handleClick }>
-        <img
-          src={ profileIcon }
-          alt="icon-profile"
-          data-testid="profile-top-btn"
-        />
-      </button>
-      <br />
-      <br />
-    </>
+    <div className="application-header">
+      <div className="logo-container">
+        <img src={ headerLogo } alt="logo do header" />
+        <img src={ headerTitle } alt="titulo do header" className="header-title" />
+      </div>
+
+      <div className="header-buttons-container">
+        {renderSearch()}
+        <button onClick={ handleClick }>
+          <img
+            src={ profileIcon }
+            alt="icon-profile"
+            data-testid="profile-top-btn"
+          />
+        </button>
+      </div>
+    </div>
   );
 }

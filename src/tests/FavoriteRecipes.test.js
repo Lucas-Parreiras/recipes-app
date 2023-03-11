@@ -1,7 +1,12 @@
 import React from 'react';
-import { render, screen, fireEvent } from '@testing-library/react';
-import { BrowserRouter } from 'react-router-dom';
+import { screen, fireEvent } from '@testing-library/react';
+// import { BrowserRouter } from 'react-router-dom';
+import copy from 'clipboard-copy';
+import { act } from 'react-dom/test-utils';
+import renderWithRouter from './renderWithRouter.js/renderWithRouter';
 import FavoriteRecipes from '../pages/FavoriteRecipes';
+
+jest.mock('clipboard-copy');
 
 describe('FavoriteRecipes', () => {
   const recipe = {
@@ -30,41 +35,34 @@ describe('FavoriteRecipes', () => {
   };
 
   beforeEach(() => {
-    localStorage.clear();
+    window.localStorage.clear();
   });
 
   it('Renderiza tudo', () => {
-    render(
-      <BrowserRouter>
-        <FavoriteRecipes />
-      </BrowserRouter>,
+    renderWithRouter(
+      <FavoriteRecipes />,
     );
     expect(screen.getByTestId('filter-by-all-btn')).toBeInTheDocument();
     fireEvent.click(screen.getByTestId('filter-by-all-btn')); // adicionado
   });
 
   it('Renderiza detalhes', () => {
-    localStorage.setItem('favoriteRecipes', JSON.stringify([recipe]));
+    window.localStorage.setItem('favoriteRecipes', JSON.stringify([recipe]));
 
-    render(
-      <BrowserRouter>
-        <FavoriteRecipes />
-      </BrowserRouter>,
+    renderWithRouter(
+      <FavoriteRecipes />,
     );
 
     fireEvent.click(screen.getByTestId('0-horizontal-image'));
 
     expect(screen.getByText('Spaghetti')).toBeInTheDocument();
-    expect(screen.getByText('Categoria: Pasta')).toBeInTheDocument();
-    expect(screen.getByText('Italiana')).toBeInTheDocument();
+    expect(screen.getByText(/italian - pasta/i)).toBeInTheDocument();
   });
 
   it('Filtra Comida', () => {
-    localStorage.setItem('favoriteRecipes', JSON.stringify([recipe1, recipe2]));
-    render(
-      <BrowserRouter>
-        <FavoriteRecipes />
-      </BrowserRouter>,
+    window.localStorage.setItem('favoriteRecipes', JSON.stringify([recipe1, recipe2]));
+    renderWithRouter(
+      <FavoriteRecipes />,
     );
 
     fireEvent.click(screen.getByTestId('filter-by-meal-btn'));
@@ -73,12 +71,10 @@ describe('FavoriteRecipes', () => {
   });
 
   it('Filtra Bebida', () => {
-    localStorage.setItem('favoriteRecipes', JSON.stringify([recipe1, recipe2]));
+    window.localStorage.setItem('favoriteRecipes', JSON.stringify([recipe1, recipe2]));
 
-    render(
-      <BrowserRouter>
-        <FavoriteRecipes />
-      </BrowserRouter>,
+    renderWithRouter(
+      <FavoriteRecipes />,
     );
     fireEvent.click(screen.getByTestId('filter-by-drink-btn'));
     expect(screen.queryByText('Spaghetti')).not.toBeInTheDocument();
@@ -86,26 +82,27 @@ describe('FavoriteRecipes', () => {
   });
 
   it('HandleSelectUnFav com click', () => {
-    const handleSelectUnFav = jest.fn();
-    localStorage.setItem('favoriteRecipes', JSON.stringify([recipe]));
-    render(
-      <BrowserRouter>
-        <FavoriteRecipes handleSelectUnFav={ handleSelectUnFav } />
-      </BrowserRouter>,
+    window.localStorage.setItem('favoriteRecipes', JSON.stringify([recipe, recipe2]));
+    renderWithRouter(
+      <FavoriteRecipes />,
     );
-    fireEvent.click(screen.getByAltText('Black Heart Icon'));
-    expect(handleSelectUnFav).toHaveBeenCalledWith('123');
+    expect(screen.queryByText(/spaghetti/i)).toBeInTheDocument();
+    act(() => {
+      fireEvent.click(screen.getAllByAltText('Black Heart Icon')[0]);
+    });
+    expect(JSON.parse(window.localStorage.getItem('favoriteRecipes'))).toEqual([recipe2]);
+    expect(screen.queryByText(/spaghetti/i)).not.toBeInTheDocument();
   });
 
   it('HandleShare com click', () => {
-    const handleChangeShare = jest.fn();
-    localStorage.setItem('favoriteRecipes', JSON.stringify([recipe]));
-    render(
-      <BrowserRouter>
-        <FavoriteRecipes handleChangeShare={ handleChangeShare } />
-      </BrowserRouter>,
+    copy.mockImplementation(() => {});
+    window.localStorage.setItem('favoriteRecipes', JSON.stringify([recipe]));
+    renderWithRouter(
+      <FavoriteRecipes />,
     );
-    fireEvent.click(screen.getByAltText('Share Icon'));
-    expect(handleChangeShare).toHaveBeenCalledWith(recipe);
+    act(() => {
+      fireEvent.click(screen.getByAltText('Share Icon'));
+    });
+    expect(copy).toHaveBeenCalledWith('http://localhost:3000/meals/123');
   });
 });

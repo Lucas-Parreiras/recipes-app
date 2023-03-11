@@ -69,6 +69,10 @@
   transform: scale(1.05);
 }
 
+.inputs-container button:disabled {
+  cursor: not-allowed;
+}
+
 .salada-left {
   bottom: 0;
   left: 0;

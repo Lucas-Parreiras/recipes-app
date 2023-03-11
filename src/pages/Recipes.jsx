@@ -79,6 +79,8 @@ function Recipes() {
     getRecipes();
   }, [location, pathname, getTwelveRecipes]);
 
+  useEffect(() => setFirstRender(true), [location]);
+
   const removeAppliedFilters = () => {
     setRecipes([...originalRecipes]);
     setSelectedFilter('');

@@ -1,5 +1,8 @@
 import React, { useState } from 'react';
 import { useHistory } from 'react-router-dom';
+import tomate from '../images/tomate.svg';
+import logoRecipes from '../images/logo-recipes.svg';
+import '../css/Login.css';
 
 function Login() {
   const [disability, setDisability] = useState(true);
@@ -25,38 +28,39 @@ function Login() {
   };
 
   return (
-    <>
-      <p>E-mail</p>
-      <input
-        type="text"
-        name="email"
-        id="email"
-        data-testid="email-input"
-        placeholder="example@example.com"
-        onChange={ handleEmailPassword }
-      />
-      <br />
-      <p>Senha</p>
-      <input
-        type="text"
-        name="password"
-        id="senha"
-        data-testid="password-input"
-        placeholder="*******"
-        onChange={ handleEmailPassword }
-      />
-      <br />
-      <button
-        type="button"
-        name=""
-        id="botaum"
-        data-testid="login-submit-btn"
-        disabled={ disability }
-        onClick={ handleButtonStorage }
-      >
-        Logar
-      </button>
-    </>
+    <div className="login-container">
+      <div className="inputs-container">
+        <img src={ logoRecipes } alt="logo do site" className="login-logo" />
+        <input
+          type="text"
+          name="email"
+          id="email"
+          data-testid="email-input"
+          placeholder="Email"
+          onChange={ handleEmailPassword }
+        />
+        <input
+          type="password"
+          name="password"
+          id="senha"
+          data-testid="password-input"
+          placeholder="Senha"
+          onChange={ handleEmailPassword }
+        />
+        <button
+          type="button"
+          name=""
+          id="botaum"
+          data-testid="login-submit-btn"
+          disabled={ disability }
+          onClick={ handleButtonStorage }
+        >
+          Logar
+        </button>
+      </div>
+      <img src={ tomate } alt="salada" className="salada-left" />
+      <img src={ tomate } alt="salada" className="salada-right" />
+    </div>
   );
 }
 

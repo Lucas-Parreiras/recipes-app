@@ -1,0 +1,27 @@
+.application-header {
+  align-items: center;
+  background-color: #fcdc36;
+  display: flex;
+  justify-content: space-between;
+  padding: 10px 2%;
+}
+
+.header-title {
+  margin-left: 20px;
+}
+
+.header-buttons-container button {
+  background-color: transparent;
+  background-size: contain;
+  border: none;
+  outline: none;
+  transition: 0.2s;
+}
+
+.header-buttons-container button:nth-child( 2 ) {
+  margin-left: 20px;
+}
+
+.header-buttons-container button:hover {
+  transform: scale(1.2);
+}

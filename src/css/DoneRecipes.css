@@ -1,3 +1,15 @@
+.done-recipes-title {
+  color: #41197f;
+  font-weight: 800;
+  letter-spacing: 0.105em;
+  text-transform: uppercase;
+}
+
+.logo-done {
+  margin: 15px 0;
+  width: 80px;
+}
+
 .filters-container {
   display: flex;
   justify-content: center;
@@ -8,13 +20,19 @@
   background-color: transparent;
   background-position: center;
   background-repeat: no-repeat;
-  background-size: contain;
+  background-size: 85% 85%;
   border: none;
   border-radius: 10px;
   height: 86.43px;
   margin-left: 35px;
   outline: none;
+  transition: 0.3s;
   width: 66.72px;
+}
+
+.filters-container input:hover {
+  background-color: #ffe8ad;
+  transform: scale(1.2);
 }
 
 .filters-container input:first-of-type {
@@ -38,6 +56,7 @@
   flex-wrap: wrap;
   justify-content: space-around;
   padding: 0 2%;
+  text-align: left;
 }
 
 .card-recipe {
@@ -119,6 +138,12 @@
 .title-and-button {
   display: flex;
   justify-content: space-between;
+}
+
+.title-and-button a h6 {
+  font-weight: 700;
+
+  /* font-size: 18px; */
 }
 
 .card-content span {

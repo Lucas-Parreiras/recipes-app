@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Link, useHistory } from 'react-router-dom';
+import copy from 'clipboard-copy';
 import blackHeartIcon from '../images/blackHeartIcon.svg';
 import shareIcon from '../images/shareIcon.svg';
 import Header from '../components/Header';
@@ -49,10 +50,10 @@ function FavoriteRecipes() {
 
   const handleChangeShare = async (favorite) => { // Define uma função assíncrona que escreve o link da receita favorita atual na área de transferência ao clicar no botão "compartilhar"
     try {
-      await navigator.clipboard.writeText(`http://localhost:3000/${favorite.type}s/${favorite.id}`);
+      await copy(`http://localhost:3000/${favorite.type}s/${favorite.id}`);
       setLinkC('Link copied!');
     } catch (error) {
-      console.error('Failed to copy: ', error);
+      setLinkC(`Falha ao copiar: ${error}`);
     }
   };
 

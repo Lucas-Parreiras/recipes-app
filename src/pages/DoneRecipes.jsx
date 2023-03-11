@@ -4,6 +4,7 @@ import Header from '../components/Header';
 import RecipeTitle from '../components/RecipeTitle';
 import ShareRecipeButton from '../components/ShareRecipeButton';
 import doneRecipes from '../tests/mocks/localStorageDoneRecipesMock';
+import done from '../images/done.svg';
 
 export default function DoneRecipes() {
   const [doneRecipesList, setDoneRecipesList] = useState([]);
@@ -24,7 +25,8 @@ export default function DoneRecipes() {
   return (
     <div>
       <Header />
-      <h1 data-testid="page-title">Done Recipes</h1>
+      <img src={ done } alt="logo done" className="logo-done" />
+      <h1 data-testid="page-title" className="done-recipes-title">Done Recipes</h1>
 
       <div className="filters-container">
         <input

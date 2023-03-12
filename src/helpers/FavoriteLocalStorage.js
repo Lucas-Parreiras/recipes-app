@@ -64,3 +64,37 @@ export const updateFavoritesStorage = ({
   actualStorageArray.push(drinkObjRecipe);
   localStorage.setItem('favoriteRecipes', JSON.stringify(actualStorageArray));
 };
+
+export const doneRecipeFunc = (type, actualRecipe, actualImg, actualId) => {
+  const doneArr = [];
+  const date = new Date();
+  if (type === 'drink') {
+    const drinkObj = {
+      id: actualId,
+      nationality: '',
+      name: actualRecipe.strDrink,
+      category: actualRecipe.strCategory,
+      image: actualImg,
+      tags: [],
+      alcoholicOrNot: actualRecipe.strAlcoholic,
+      type,
+      doneDate: date,
+    };
+    doneArr.push(drinkObj);
+    localStorage.setItem('doneRecipes', JSON.stringify(doneArr));
+    return;
+  }
+  const mealObj = {
+    id: actualId,
+    nationality: actualRecipe.strArea,
+    name: actualRecipe.strMeal,
+    category: actualRecipe.strCategory,
+    image: actualImg,
+    tags: [actualRecipe.strTags],
+    alcoholicOrNot: '',
+    type,
+    doneDate: date,
+  };
+  doneArr.push(mealObj);
+  localStorage.setItem('doneRecipes', JSON.stringify(doneArr));
+};

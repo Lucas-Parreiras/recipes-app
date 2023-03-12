@@ -1,7 +1,11 @@
 import React, { useState, useEffect } from 'react';
-import { useParams, useLocation } from 'react-router-dom';
+import { useParams, useLocation, useHistory } from 'react-router-dom';
+import clipboardCopy from 'clipboard-copy';
 import { mealAPI, cockTailAPI } from '../helpers/APIsHandle';
-import { addToFavorites, updateFavoritesStorage } from '../helpers/FavoriteLocalStorage';
+import { addToFavorites,
+  updateFavoritesStorage, doneRecipeFunc } from '../helpers/FavoriteLocalStorage';
+import blackHeartIcon from '../images/blackHeartIcon.svg';
+import whiteHeartIcon from '../images/whiteHeartIcon.svg';
 
 function RecipeInProgress() {
   const [recipe, setRecipe] = useState({});
@@ -9,17 +13,37 @@ function RecipeInProgress() {
   const [recipeImg, setRecipeImg] = useState('');
   const [savedIngredients, setSavedIngredients] = useState([]);
   const [recipeType, setRecipeType] = useState('');
+  const [isFavorite, setIsFavorite] = useState(false);
   const { id } = useParams();
   const location = useLocation();
+  const history = useHistory();
+
+  // Função responsável por adicionar receita pronta ao localStorage e redirecionar para doneRecipes.
+
+  const doneBtnHandler = () => {
+    doneRecipeFunc(recipeType, recipe, recipeImg, id);
+    history.push('/done-recipes');
+  };
 
   // Função para salvar os ingredientes no localStorage, ela é chamada na função resposável pelo click dos checkboxes.
 
-  const handleLocalStorage = (ingredientName) => {
-    const actualProgress = JSON.parse(localStorage.getItem('inProgressRecipes'));
-    if (actualProgress !== null) {
-      const thisRecipe = actualProgress
+  const createProgress = (ingredientName) => {
+    const ingredientsKey = [];
+    ingredientsKey.push(ingredientName);
+    const newStorageObj = {
+      recipeIdStorage: id,
+      ingredientsInProgress: ingredientsKey,
+    };
+    const initialStorage = [newStorageObj];
+    localStorage.setItem('inProgressRecipes', JSON.stringify(initialStorage));
+  };
+
+  const updateProgress = (progress, ingredientName) => {
+    const checkProgress = progress.some(({ recipeIdStorage }) => recipeIdStorage === id);
+    if (checkProgress === true) {
+      const thisRecipe = progress
         .find(({ recipeIdStorage }) => recipeIdStorage === id);
-      const recipeIndex = actualProgress
+      const recipeIndex = progress
         .findIndex(({ recipeIdStorage }) => recipeIdStorage === id);
       const ingredientsArrayStorage = thisRecipe.ingredientsInProgress;
       ingredientsArrayStorage.push(ingredientName);
@@ -27,17 +51,27 @@ function RecipeInProgress() {
         recipeIdStorage: id,
         ingredientsInProgress: ingredientsArrayStorage,
       };
-      actualProgress.splice(recipeIndex, 1, newRecipeObj);
-      localStorage.setItem('inProgressRecipes', JSON.stringify(actualProgress));
+      progress.splice(recipeIndex, 1, newRecipeObj);
+      localStorage.setItem('inProgressRecipes', JSON.stringify(progress));
+      return;
+    }
+    const newProgressArr = progress;
+    const newRecipeIngredients = [];
+    newRecipeIngredients.push(ingredientName);
+    const newRecipeProgress = {
+      recipeIdStorage: id,
+      ingredientsInProgress: newRecipeIngredients,
+    };
+    newProgressArr.push(newRecipeProgress);
+    localStorage.setItem('inProgressRecipes', JSON.stringify(newProgressArr));
+  };
+
+  const handleLocalStorage = (ingredientName) => {
+    const actualProgress = JSON.parse(localStorage.getItem('inProgressRecipes'));
+    if (actualProgress !== null) {
+      updateProgress(actualProgress, ingredientName);
     } else {
-      const ingredientsKey = [];
-      ingredientsKey.push(ingredientName);
-      const newStorageObj = {
-        recipeIdStorage: id,
-        ingredientsInProgress: ingredientsKey,
-      };
-      const initialStorage = [newStorageObj];
-      localStorage.setItem('inProgressRecipes', JSON.stringify(initialStorage));
+      createProgress(ingredientName);
     }
   };
 
@@ -52,12 +86,12 @@ function RecipeInProgress() {
 
   // Função responsável por copiar o url, ela é chamada no botão de compartilhar.
 
-  const copyLink = () => {
+  const handleShareClick = async () => {
     const path = location.pathname;
     const num = 12;
     const detailPath = path.substring(0, path.length - num);
     const fullUrl = `https://localhost:3000${detailPath}`;
-    navigator.clipboard.writeText(fullUrl);
+    await clipboardCopy(fullUrl);
     global.alert('Link copied!');
   };
 
@@ -72,11 +106,24 @@ function RecipeInProgress() {
       actualImg: recipeImg,
       actualId: id,
     };
+    if (isFavorite) {
+      setIsFavorite(false);
+    } else {
+      setIsFavorite(true);
+    }
 
     if (actualStorage) {
       return updateFavoritesStorage(paramObj);
     }
     return addToFavorites(recipeType, recipe, recipeImg, id);
+  };
+
+  const isFavoriteCheck = () => {
+    const actualStorage = JSON.parse(localStorage.getItem('favoriteRecipes'));
+    if (actualStorage) {
+      const favoriteCheck = actualStorage.some((e) => e.id === id);
+      setIsFavorite(favoriteCheck);
+    }
   };
 
   useEffect(() => {
@@ -129,6 +176,7 @@ function RecipeInProgress() {
       getDrink();
     }
     getStorage();
+    isFavoriteCheck();
   }, [id, location.pathname]);
 
   return (
@@ -142,15 +190,25 @@ function RecipeInProgress() {
       <h4 data-testid="recipe-category">{ recipe.strCategory }</h4>
       <button
         type="button"
-        data-testid="favorite-btn"
+        // data-testid="favorite-btn"
         onClick={ handleFavoritesStorage }
       >
-        Adicionar aos favoritos
+        {
+          isFavorite ? <img
+            src={ blackHeartIcon }
+            data-testid="favorite-btn"
+            alt="icone de favoritar preenchido"
+          /> : <img
+            src={ whiteHeartIcon }
+            data-testid="favorite-btn"
+            alt="icone de favoritar vazio"
+          />
+        }
       </button>
       <button
         type="button"
         data-testid="share-btn"
-        onClick={ copyLink }
+        onClick={ handleShareClick }
       >
         Compartilhar
       </button>
@@ -198,7 +256,13 @@ function RecipeInProgress() {
           })
         }
       </div>
-      <button type="button" data-testid="finish-recipe-btn">Finalizar receita</button>
+      <button
+        type="button"
+        data-testid="finish-recipe-btn"
+        onClick={ doneBtnHandler }
+      >
+        Finalizar receita
+      </button>
     </div>
   );
 }

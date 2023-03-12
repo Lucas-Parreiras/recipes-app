@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { useParams, useLocation, useHistory } from 'react-router-dom';
 import clipboardCopy from 'clipboard-copy';
 import { mealAPI, cockTailAPI } from '../helpers/APIsHandle';
@@ -17,16 +17,12 @@ function RecipeInProgress() {
   const { id } = useParams();
   const location = useLocation();
   const history = useHistory();
-
   // Função responsável por adicionar receita pronta ao localStorage e redirecionar para doneRecipes.
-
   const doneBtnHandler = () => {
     doneRecipeFunc(recipeType, recipe, recipeImg, id);
     history.push('/done-recipes');
   };
-
   // Função para salvar os ingredientes no localStorage, ela é chamada na função resposável pelo click dos checkboxes.
-
   const createProgress = (ingredientName) => {
     const ingredientsKey = [];
     ingredientsKey.push(ingredientName);
@@ -74,18 +70,14 @@ function RecipeInProgress() {
       createProgress(ingredientName);
     }
   };
-
   // Função responsável pela adição do risco no ingrediente checkado, ela é chamada no atributo onClick dos inputs checkbox.
-
   const handleClickCheckbox = ({ target }) => {
     const ingredientId = target.id.substring(1);
     const ingredient = document.getElementsByClassName(ingredientId);
     ingredient[0].style.textDecoration = 'line-through solid rgb(0, 0, 0)';
     handleLocalStorage(target.name);
   };
-
   // Função responsável por copiar o url, ela é chamada no botão de compartilhar.
-
   const handleShareClick = async () => {
     const path = location.pathname;
     const num = 12;
@@ -94,9 +86,7 @@ function RecipeInProgress() {
     await clipboardCopy(fullUrl);
     global.alert('Link copied!');
   };
-
   // Função responsável por favoritar receitas e salvar no localStorage, ela será chamada no botão favoritar.
-
   const handleFavoritesStorage = () => {
     const actualStorage = JSON.parse(localStorage.getItem('favoriteRecipes'));
     const paramObj = {
@@ -106,25 +96,20 @@ function RecipeInProgress() {
       actualImg: recipeImg,
       actualId: id,
     };
-    if (isFavorite) {
-      setIsFavorite(false);
-    } else {
-      setIsFavorite(true);
-    }
-
+    setIsFavorite(!isFavorite);
     if (actualStorage) {
       return updateFavoritesStorage(paramObj);
     }
     return addToFavorites(recipeType, recipe, recipeImg, id);
   };
 
-  const isFavoriteCheck = () => {
+  const isFavoriteCheck = useCallback(() => {
     const actualStorage = JSON.parse(localStorage.getItem('favoriteRecipes'));
     if (actualStorage) {
       const favoriteCheck = actualStorage.some((e) => e.id === id);
       setIsFavorite(favoriteCheck);
     }
-  };
+  }, [id]);
 
   useEffect(() => {
     const savedIngredientsHandler = (storage) => {
@@ -136,14 +121,12 @@ function RecipeInProgress() {
         setSavedIngredients(storageIngredients);
       }
     };
-
     const getStorage = () => {
       const savedStorage = JSON.parse(localStorage.getItem('inProgressRecipes'));
       if (savedStorage !== null) {
         savedIngredientsHandler(savedStorage);
       }
     };
-
     const getMeal = async () => {
       const recipeData = await mealAPI(`lookup.php?i=${id}`);
       const recipeObj = recipeData.meals[0];
@@ -156,7 +139,6 @@ function RecipeInProgress() {
       setIngredientsArray(recipeIngredients);
       setRecipeType('meal');
     };
-
     const getDrink = async () => {
       const drinkData = await cockTailAPI(`lookup.php?i=${id}`);
       const drinkObj = drinkData.drinks[0];
@@ -169,7 +151,6 @@ function RecipeInProgress() {
       setIngredientsArray(drinkIngredients);
       setRecipeType('drink');
     };
-
     if (location.pathname.startsWith('/meals')) {
       getMeal();
     } else {
@@ -177,7 +158,7 @@ function RecipeInProgress() {
     }
     getStorage();
     isFavoriteCheck();
-  }, [id, location.pathname]);
+  }, [id, location.pathname, isFavoriteCheck]);
 
   return (
     <div>
@@ -266,5 +247,4 @@ function RecipeInProgress() {
     </div>
   );
 }
-
 export default RecipeInProgress;

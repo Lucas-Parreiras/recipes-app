@@ -3,6 +3,7 @@ import { useLocation } from 'react-router-dom';
 import CardRecipe from '../components/CardRecipe';
 import Footer from '../components/Footer';
 import Header from '../components/Header';
+import Loading from '../components/Loading';
 import SearchBar from '../components/SearchBar';
 import RecipeContext from '../context/RecipeContext';
 import { cockTailAPI, mealAPI } from '../helpers/APIsHandle';
@@ -23,6 +24,8 @@ function Recipes() {
   const [selectedFilter, setSelectedFilter] = useState('');
   // declaração de estado global que controla a renderização da SearchBar
   const { showSearch } = useContext(RecipeContext);
+  // declaração de estado global para renderização da msg de Loading
+  const { isLoading, setIsLoading } = useContext(RecipeContext);
   // usado para obtenção de dados do navegador a respeito da rota em uso no momento
   const location = useLocation();
   // destruturando apenas o nome da rota em uso
@@ -60,6 +63,7 @@ function Recipes() {
   useEffect(() => {
     // função assíncrona para obtenção das receitas
     const getRecipes = async () => {
+      setIsLoading(true);
       // muda o estado de loading para true, para exibir mensagem de 'carregando...'
       let recipesList = [];
       let categoriesList = [];
@@ -75,9 +79,10 @@ function Recipes() {
         getTwelveRecipes(recipesList, 'drinks');
         getFiveCategories(categoriesList, 'drinks');
       }
+      setIsLoading(false);
     };
     getRecipes();
-  }, [location, pathname, getTwelveRecipes]);
+  }, [location, pathname, getTwelveRecipes, setIsLoading]);
 
   useEffect(() => setFirstRender(true), [location]);
 
@@ -87,7 +92,7 @@ function Recipes() {
   };
 
   const applyFilterByCategory = async ({ target: { name } }) => {
-    // setIsLoading(true);
+    setIsLoading(true);
     setSelectedFilter(name);
     let recipesList = [];
     if (selectedFilter !== name) {
@@ -105,6 +110,7 @@ function Recipes() {
     } else {
       removeAppliedFilters();
     }
+    setIsLoading(false);
   };
 
   return (
@@ -148,32 +154,32 @@ function Recipes() {
           />
         )) }
       </div>
-
-      { recipes !== null && (
-        <div className="recipes-container">
-
-          {(pathname === '/meals')
-            ? recipes.map(({ idMeal, strMeal, strMealThumb }, index) => (
-              <CardRecipe
-                recipeType="meals"
-                key={ idMeal }
-                recipeName={ strMeal }
-                recipeThumb={ strMealThumb }
-                id={ idMeal }
-                index={ index }
-              />
-            ))
-            : recipes.map(({ idDrink, strDrink, strDrinkThumb }, index) => (
-              <CardRecipe
-                recipeType="drinks"
-                key={ idDrink }
-                recipeName={ strDrink }
-                recipeThumb={ strDrinkThumb }
-                id={ idDrink }
-                index={ index }
-              />
-            )) }
-        </div>)}
+      {isLoading
+        ? <Loading />
+        : recipes !== null && (
+          <div className="recipes-container">
+            {(pathname === '/meals')
+              ? recipes.map(({ idMeal, strMeal, strMealThumb }, index) => (
+                <CardRecipe
+                  recipeType="meals"
+                  key={ idMeal }
+                  recipeName={ strMeal }
+                  recipeThumb={ strMealThumb }
+                  id={ idMeal }
+                  index={ index }
+                />
+              ))
+              : recipes.map(({ idDrink, strDrink, strDrinkThumb }, index) => (
+                <CardRecipe
+                  recipeType="drinks"
+                  key={ idDrink }
+                  recipeName={ strDrink }
+                  recipeThumb={ strDrinkThumb }
+                  id={ idDrink }
+                  index={ index }
+                />
+              )) }
+          </div>)}
       <Footer />
     </div>
 

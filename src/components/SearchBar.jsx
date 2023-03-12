@@ -9,6 +9,7 @@ function SearchBar() {
   const [fetchedData, setFetchedData] = useState([]);
   const [searchTerm, setSearchTerm] = useState(''); // armazena o texto a ser buscado na API
   const [searchByType, setSearchByType] = useState('ingredient'); // armazena o filtro por tipo: ingredient, name ou firstLetter
+  const { setIsLoading } = useContext(RecipeContext); // declaração de estado global para renderização da msg de Loading
   const location = useLocation();
   const history = useHistory();
 
@@ -33,6 +34,7 @@ function SearchBar() {
     if (searchByType === 'firstLetter' && searchTerm.length > 1) {
       global.alert('Your search must have only 1 (one) character');
     } else {
+      setIsLoading(true);
       let dataFetched = [];
       if (location.pathname === '/meals') {
         const apiData = await mealAPI(endpoint);
@@ -42,6 +44,7 @@ function SearchBar() {
         dataFetched = apiData.drinks;
       }
       setFetchedData(dataFetched);
+      setIsLoading(false);
     }
   }; // realiza o fetch e atualiza o estado fetchedData com array contendo as receitas filtradas
 

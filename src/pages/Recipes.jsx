@@ -92,7 +92,7 @@ function Recipes() {
   };
 
   const applyFilterByCategory = async ({ target: { name } }) => {
-    // setIsLoading(true);
+    setIsLoading(true);
     setSelectedFilter(name);
     let recipesList = [];
     if (selectedFilter !== name) {
@@ -110,6 +110,7 @@ function Recipes() {
     } else {
       removeAppliedFilters();
     }
+    setIsLoading(false);
   };
 
   return (
